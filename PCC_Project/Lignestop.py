@@ -1,4 +1,4 @@
-class ClasseLigne2():
+class ClasseLignestop():
     #Position Station(x, nom, ligne de haut en base)
     liste_stations = []
     liste_stations.append((150, "LA DEFENSE", 3))
@@ -102,8 +102,61 @@ class ClasseLigne2():
     liste_terminus.append(( 7918, 310, "TERMINUS D5"))
 
     liste_metro = []
-    liste_metro.append(("Train 1", 10,  2, 80,1,"#FFCC45" ))
-
+    #train direction chateau de vincennes
+    #depart train garage la defense
+    liste_metro.append(("Train 1", 10, 1, 80,"#FFCC45" ))
+    liste_metro.append(("Train 3",430, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 6",645,  1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 7", 860,1,80, "#FFCC45" ))
+    liste_metro.append(("Train 8",1175, 1, 110, "#FFCC45" ))
+    liste_metro.append(("Train 9",1455, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 10", 1735, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 11",2015, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 12",2295,  1,80, "#FFCC45" ))
+    liste_metro.append(("Train 13", 2575,1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 14",2855, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 15",3135, 1,80 , "#FFCC45" ))
+    liste_metro.append(("Train 16", 3415, 1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 17",3655,1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 18",3935,  1,80, "#FFCC45" ))
+    liste_metro.append(("Train 19", 4215, 1,80 , "#FFCC45" ))
+    liste_metro.append(("Train 20",4495, 1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 21",4775,  1,80 , "#FFCC45" ))
+    liste_metro.append(("Train 22", 5055, 1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 23",5335, 1,80 , "#FFCC45" ))
+    liste_metro.append(("Train 24",5615, 1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 4", 6422,1, 80, "#FFCC45" ))
+    liste_metro.append(("Train 5",6422, 1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 25", 5335, -1,50 , "#FFCC45" ))
+    liste_metro.append(("Train 26",430, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 27",6669,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 28", 7000, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 29",6125, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 30",645,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 31", 860, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 32",5895, 1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 33",1455,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 34", 1735, -1,50 , "#FFCC45" ))
+    liste_metro.append(("Train 35",2015, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 36",2295,  -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 37", 2575, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 38",2855, -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 39",3135,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 40", 3415, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 41",3655, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 42",3935,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 43", 4215, -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 44",4495, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 45",4775,  -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 46", 5055, -1,50 , "#FFCC45" ))
+    liste_metro.append(("Train 47  ",5835, -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 48",5615,  -1,50 , "#FFCC45" ))
+    liste_metro.append(("Train 49", 6669, -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 50",1046, -1, 50 , "#FFCC45" ))
+    liste_metro.append(("Train 51",6175,  1, 80 , "#FFCC45" ))
+    liste_metro.append(("Train 52", 5055, -1,50 , "#FFCC45" ))
+    liste_metro.append(("Train 53  ",6335, -1, 50, "#FFCC45" ))
+    liste_metro.append(("Train 54",5615,  -1,50 , "#FFCC45" ))
     liste_lignes = []
     liste_lignes.append((10, 100, 7058, 100, "#FCFF42", 2))
     liste_lignes.append((10, 130, 7058, 130, "#FCFF42", 2))
@@ -122,24 +175,3 @@ class ClasseLigne2():
     liste_lignes.append((7148, 250, 7918, 250, "#FCFF42", 2))
     liste_lignes.append((7178, 280, 7918, 280, "#FCFF42", 2))
     liste_lignes.append((7208, 310, 7918, 310, "#FCFF42", 2))
-
-    liste_depot_eguillage = []
-    # eguillage depot
-    liste_depot_eguillage.append((7058, 160, 7088, 190, 0, "Eg D1","#CCCCCC"))
-    liste_depot_eguillage.append((7088, 190, 7118, 220, 0, "Eg D2","#CCCCCC"))
-    liste_depot_eguillage.append((7118, 220, 7148, 250, 0, "Eg D3","#CCCCCC"))
-    liste_depot_eguillage.append((7148, 250, 7178, 280, 0, "Eg D4","#CCCCCC"))
-    liste_depot_eguillage.append((7178, 280, 7208, 310, 0, "Eg D5","#CCCCCC"))
-
-
-    liste_depot_ligne = []
-     #ligne depot
-    liste_depot_ligne.append((7088, 190, 7918, 190, "#CCCCCC", 2))
-    liste_depot_ligne.append((7118, 220, 7918, 220, "#CCCCCC", 2))
-    liste_depot_ligne.append((7148, 250, 7918, 250, "#CCCCCC", 2))
-    liste_depot_ligne.append((7178, 280, 7918, 280, "#CCCCCC", 2))
-    liste_depot_ligne.append((7208, 310, 7918, 310, "#CCCCCC", 2))
-
-    liste_feu_traffic = []
-    # feu eguillage terminus porte de cligancourt
-    liste_feu_traffic.append((260, 50, 2))

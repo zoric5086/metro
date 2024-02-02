@@ -1,8 +1,8 @@
 class ClasseLigne0():
     #Position Station(x, nom, ligne de haut en base)
     liste_stations = []
-    liste_stations.append((150, "station1", 3))
-    liste_stations.append((650, "station2", 3))
+    liste_stations.append((150, "station1", 3, 150))
+    liste_stations.append((650, "station2", 3, 150))
 
 
 
@@ -23,14 +23,18 @@ class ClasseLigne0():
 
 
     liste_metro = []
-    liste_metro.append(("Train 1", 10,  2, 80,"#FFCC45" ))
-    liste_metro.append(("Train 2",430, -2, 50, "#FFCC45" ))
-    liste_metro.append(("Train 3", 40,  -2, 50,"#FFCC45" ))
-    liste_metro.append(("Train 4",430, 2, 80, "#FFCC45" ))
-    liste_metro.append(("Train 5", 200,  -2, 50,"#FFCC45" ))
-    liste_metro.append(("Train 6",200, 2, 80, "#FFCC45" ))
+    liste_metro.append(("Train 1", 10,  2, 80,1,"#FFCC45" ))
+    liste_metro.append(("Train 2",430, -2, 50, 1,"#FFCC45" ))
+    liste_metro.append(("Train 3", 40,  -2, 50,1,"#FFCC45" ))
+    liste_metro.append(("Train 4",430, 2, 80, 1,"#FFCC45" ))
+    liste_metro.append(("Train 5", 200,  -2, 50,1,"#FFCC45" ))
+    liste_metro.append(("Train 6",200, 2, 80, 1,"#FFCC45" ))
 
 
     liste_lignes = []
     liste_lignes.append((10, 100, 850, 100, "#FCFF42", 2))
     liste_lignes.append((10, 130, 850, 130, "#FCFF42", 2))
+
+    liste_feu_traffic = []
+    # feu eguillage terminus porte de cligancourt
+    liste_feu_traffic.append((260, 50, 2))
