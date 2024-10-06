@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4e82191f-cdfa-4103-bc15-66542a931d1a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../PCC_Project/Ligne6.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PCC_Project/Lignestop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/.idea/PCC_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/.idea/PCC_Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/Ligne1.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/Ligne1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/Ligne14.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/Ligne14.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/PCC.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/PCC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PCC_Project/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PCC_Project/main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2cEaMTEzE3PArOTgVr55nq0MZyj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/david/PycharmProjects/pythonProject1/.venv"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\david\PycharmProjects\pythonProject1\.venv" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5a2391486177-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13763.11" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4e82191f-cdfa-4103-bc15-66542a931d1a" name="Changes" comment="" />
+      <created>1707679143725</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1707679143725</updated>
+    </task>
+    <servers />
+  </component>
+</project>
