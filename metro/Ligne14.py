@@ -148,10 +148,10 @@ class ClasseLigne14():
     liste_metro.append(("Train 56  ",7869, 0.45, 80, 1,"#EB0004" ))
     liste_metro.append(("Train 57",8269,  -0.45,50 , 1,"#EB0004" ))
     liste_metro.append(("Train 58", 8269, 0.45, 80, 1,"#EB0004" ))
-    liste_metro.append(("Train 58",8669,  -0.45, 50 , 1,"#EB0004" ))
-    liste_metro.append(("Train 60", 8669, 0.45,80 , 1,"#EB0004" ))
-    liste_metro.append(("Train 61  ",9069, -0.45, 50, 1,"#EB0004" ))
-    liste_metro.append(("Train 62",9069,  0.45, 80, 1,"#EB0004" ))
+    liste_metro.append(("Train 59",8669,  -0.45, 50 , 1,"#EB0004" ))
+    liste_metro.append(("Train 61", 8669, 0.45,80 , 1,"#EB0004" ))
+    liste_metro.append(("Train 62",9069, -0.45, 50, 1,"#EB0004" ))
+    liste_metro.append(("Train 63",9069,  0.45, 80, 1,"#EB0004" ))
 
 
     liste_lignes = []
