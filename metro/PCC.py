@@ -289,6 +289,7 @@ def clic_sur_canevas(event):
 
 class Train:
     def __init__(self, canvas, canvas_metro, name, position, speed, y_offset, on_off, color, order):
+        self.bouton_parametre =None
         self.canvas = canvas
         self.last_station = None
         self.canvas_metro = canvas_metro
@@ -333,7 +334,7 @@ class Train:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
-                self.text_metro = self.canvas_metro.create_text(180, self.order * 20 + 50, text=station.name, anchor="w", fill="#FFFFFF", font=("Arial", 8))
+                self.text_metro = self.canvas_metro.create_text(580, self.order * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
                 self.speed = 0
                 self.arret_station = 1
                 station.FQ_ON()
@@ -344,7 +345,7 @@ class Train:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
-                self.text_metro = self.canvas_metro.create_text(180, self.order * 20 + 50, text=station.name, anchor="w", fill="#FFFFFF", font=("Arial", 8))
+                self.text_metro = self.canvas_metro.create_text(580, self.order * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
                 station.FQ_ON()
                 self.speed = 0
                 self.arret_station = 1
@@ -559,32 +560,48 @@ class Train:
             self.canvas.itemconfig(self.line_id, fill=self.color)
 
             self.canvas_metro.delete(self.draw_metro)
-            self.draw_metro = self.canvas_metro.create_line(100, self.order * 20 + 50, 150, self.order * 20 + 50, fill=self.color,
+            self.draw_metro = self.canvas_metro.create_line(500, (self.order +1) * 20 + 50, 550, (self.order +1) * 20 + 50, fill=self.color,
                                           width=5)
             if self.speed > 0:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
                 self.dir_metro = self.canvas_metro.create_polygon(
-                    [150, self.order * 20 + 50 + 5, 150,
-                     self.order * 20 + 50 - 5, 150 + 5,
-                     self.order * 20 + 50], outline="", fill="#000000", width=0)
+                    [550, (self.order +1) * 20 + 50 + 5, 550,
+                     (self.order +1) * 20 + 50 - 5, 550 + 5,
+                     (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
             if self.speed < 0:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
                 self.dir_metro = self.canvas_metro.create_polygon(
-                    [100, self.order * 20 + 50 + 5, 100,
-                     self.order * 20 + 50 - 5, 100 - 5,
-                     self.order * 20 + 50], outline="", fill="#000000", width=0)
+                    [500, (self.order +1) * 20 + 50 + 5, 500,
+                     (self.order +1) * 20 + 50 - 5, 500 - 5,
+                     (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
             if (self.color == "#000000" and self.button_dir_droit == None) or (self.arret_collision==1 and self.button_dir_droit == None):
                 self.button_dir_droit = self.canvas.create_polygon([self.x2, self.y2  + 5, self.x2, self.y2 - 5, self.x2 + 5, self.y2], outline="", fill="#00FF00", width=0)
                 self.button_dir_gauche = self.canvas.create_polygon([self.x1, self.y1 + 5, self.x1, self.y1 - 5, self.x1 - 5, self.y1], outline="", fill="#00FF00",width=0)
                 self.can_metro_button_dir_droit = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] + 5, canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] - 5, canvas_metro.coords(self.draw_metro)[2] + 5, canvas_metro.coords(self.draw_metro)[3]], outline="", fill="#00FF00",width=0)
                 self.can_metro_button_dir_gauche = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] + 5, canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] - 5, canvas_metro.coords(self.draw_metro)[0] - 5, canvas_metro.coords(self.draw_metro)[1]], outline="", fill="#00FF00", width=0)
+                image = Image.open("parametre.png")
+                image = image.resize((20, 00))
+                photo_parametre = ImageTk.PhotoImage(image)
+
+
+
+                # Créer un Frame pour contenir le bouton
+                frame_bouton = tk.Frame(canvas)
+                frame_bouton.pack()
+
+                # Créer le bouton dans le frame avec l'image et associer la fonction ouvrir_fenetre
+                self.button_parametre = tk.Button(frame_bouton, image=photo_parametre, command=ouvrir_fenetre)
+                self.button_parametre.image = photo_parametre  # Garder une référence à l'image
+                self.button_parametre.pack()
+
+                canvas.create_window(20, (self.order +1) * 20 + 50, anchor=tk.CENTER, window=frame_bouton)
         else:
             self.line_id = self.canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill=self.color, width=5)
             self.canvas_metro.delete(self.nom_metro)
 
-            self.nom_metro = self.canvas_metro.create_text(50, self.order * 20 + 50, text=self.name, fill="#FFFFFF",
+            self.nom_metro = self.canvas_metro.create_text(450, (self.order +1) * 20 + 50, text=self.name, fill="#000000",
                                                                        font=("Arial", 8))
 
 
@@ -895,11 +912,18 @@ def update_trains():
     metro_control.update_trains()
     root.after(50, update_trains)
 
+
+
 update_trains()
 # Appeler la fonction update_time pour mettre à jour l'heure
 update_time()
+canvas_metro.create_text(200, 30, text="Gestion des stations", anchor=tk.CENTER, fill="#000000", font=("Arial",12))
+canvas_metro.create_text(600, 30, text="Gestion des trains", anchor=tk.CENTER, fill="#000000", font=("Arial",12))
+canvas_metro.create_text(980, 30, text="Gestion du traffic", anchor=tk.CENTER, fill="#000000", font=("Arial", 12))
+canvas_metro.create_line(10, 20, 10, 1000, fill="#000000",width=2)
+canvas_metro.create_line(400, 20, 400, 1000, fill="#000000",width=2)
+canvas_metro.create_line(800, 20, 800, 1000, fill="#000000",width=2)
 
-canvas_metro.create_text(320, 15, text="Gestion du traffic", anchor=tk.CENTER, fill="#FFFFFF", font=("Arial", 8))
 
 #bouton stop
 bouton_stop = tk.Button(canvas_metro, command=action_bouton_stop)
@@ -913,7 +937,7 @@ photo_stop = ImageTk.PhotoImage(image)
 # Mettre à jour le bouton avec l'image "stop"
 bouton_stop.config(image=photo_stop, command=action_bouton_stop)
 bouton_stop.image = photo_stop
-button_stop_window = canvas_metro.create_window(320, 100, anchor=tk.CENTER, window=bouton_stop)
+button_stop_window = canvas_metro.create_window(920, 150, anchor=tk.CENTER, window=bouton_stop)
 
 #bouton reprise
 bouton_reprise = tk.Button(canvas_metro, command=action_bouton_reprise)
@@ -927,7 +951,7 @@ photo_reprise = ImageTk.PhotoImage(image)
 # Mettre à jour le bouton avec l'image "stop"
 bouton_reprise.config(image=photo_reprise, command=action_bouton_reprise)
 bouton_reprise.image = photo_reprise
-button_reprise_window = canvas_metro.create_window(320, 50, anchor=tk.CENTER, window=bouton_reprise)
+button_reprise_window = canvas_metro.create_window(920, 100, anchor=tk.CENTER, window=bouton_reprise)
 
 #bouton parametre
 #bouton_parametre = tk.Button(metro_control, command=ouvrir_fenetre())
