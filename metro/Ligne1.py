@@ -1,7 +1,7 @@
 class ClasseLigne1():
     #Position Station(x, nom, ligne de haut en base)
     liste_stations = []
-    liste_stations.append((250, "LA DEFENSE", 3, 650))
+    liste_stations.append((250, "LA DEFENSE", 3, 350))
     liste_stations.append((530, "ESPLANADE DE LA DEFENSE", 3, 380))
     liste_stations.append((745, "PONT DE NEUILLY", 2, 380))
     liste_stations.append((745, "PONT DE NEUILLY", 4, 280))
@@ -48,8 +48,8 @@ class ClasseLigne1():
     liste_stations.append((6275, "SAINT MANDE", 4, 325))
     liste_stations.append((6522, "BERAULT",2, 325))
     liste_stations.append((6522, "BERAULT", 4, 325))
-    liste_stations.append((6769, "CHATEAU DE VINCENNES",2, 850))
-    liste_stations.append((6769, "CHATEAU DE VINCENNES", 4, 850))
+    liste_stations.append((6769, "CHATEAU DE VINCENNES",2, 350))
+    liste_stations.append((6769, "CHATEAU DE VINCENNES", 4, 350))
 
     liste_eguillages = []
     liste_eguillages.append((625, 100, 655, 130, 0, "Eg esplanade de la défense"))
@@ -116,7 +116,7 @@ class ClasseLigne1():
     liste_metro.append(("Train 22", 5155, 0.50, 80 , 1,"#EB0004" ))
     liste_metro.append(("Train 23",5435,0.50,80 , 1,"#EB0004" ))
     liste_metro.append(("Train 24",5715, 0.50, 80 , 1,"#EB0004" ))
-    liste_metro.append(("Train 4", 6522,0.50, 80, 1,"#EB0004" ))
+    #liste_metro.append(("Train 4", 6522,0.50, 80, 1,"#EB0004" ))
     liste_metro.append(("Train 5",6522,0.50, 80 , 1,"#EB0004" ))
     liste_metro.append(("Train 25", 5435, -0.50,50 , 1,"#EB0004" ))
     liste_metro.append(("Train 26",530, -0.50, 50 , 1,"#EB0004" ))

@@ -334,7 +334,7 @@ class Train:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
-                self.text_metro = self.canvas_metro.create_text(580, self.order * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
+                self.text_metro = self.canvas_metro.create_text(580, (self.order +1) * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
                 self.speed = 0
                 self.arret_station = 1
                 station.FQ_ON()
@@ -345,17 +345,17 @@ class Train:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
-                self.text_metro = self.canvas_metro.create_text(580, self.order * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
+                self.text_metro = self.canvas_metro.create_text(580,  (self.order +1) * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
                 station.FQ_ON()
                 self.speed = 0
                 self.arret_station = 1
+
 
             #compteur de temps d'arrêt
             elif  (station.lineUp == self.y1 or station.lineBottom == self.y1) and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
                 self.arret = self.arret + 1
                 if self.arret > station.duree_stop and self.color != "#000000":
                     self.arret = 0
-                    self.arret_station = 0
                     self.speed = self.orig_speed
                     station.FQ_OFF()
 
@@ -581,6 +581,11 @@ class Train:
                 self.button_dir_gauche = self.canvas.create_polygon([self.x1, self.y1 + 5, self.x1, self.y1 - 5, self.x1 - 5, self.y1], outline="", fill="#00FF00",width=0)
                 self.can_metro_button_dir_droit = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] + 5, canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] - 5, canvas_metro.coords(self.draw_metro)[2] + 5, canvas_metro.coords(self.draw_metro)[3]], outline="", fill="#00FF00",width=0)
                 self.can_metro_button_dir_gauche = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] + 5, canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] - 5, canvas_metro.coords(self.draw_metro)[0] - 5, canvas_metro.coords(self.draw_metro)[1]], outline="", fill="#00FF00", width=0)
+
+                #canvas_metro.create_rectangle(60, 60, 160, 80, fill="#000000", width=2)
+                #canvas_metro.create_rectangle(10, 10, 1150, 50, fill="#000000", width=2)
+
+                #self.copy= (self.Name)
                 #image = Image.open("parametre.png")
                 #image = image.resize((20, 00))
                 #photo_parametre = ImageTk.PhotoImage(image)
@@ -617,13 +622,25 @@ class Station:
         self.open = 1
         self.quai_on = 1
         self.duree_stop = DureeStop
-        self.y1 = Offset * 30 + 15
-        self.x2 = X + 65
-        self.y2 = Offset * 30 + 35
-        self.color = "#8BB1D5"
-        self.text_id = canvas.create_text(self.x1 + 32, 30, text=self.name, fill="#000000", font = ("Arial", 6), anchor = "center")
-        self.rec_id = canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2, fill= self.color, outline = "")
-        self.image = canvas.create_image((self.x1+self.x2)/2,(self.y1 + self.y2)/2 , anchor=tk.CENTER, image=photo_fq_off)
+        self.y1 = Offset * 30 + 10
+        self.x2 = X + 45
+        self.y2 = Offset * 30 + 40
+        self.color = "#7A7A7A"
+        self.text_id = canvas.create_text(self.x1 + 32, 30, text=self.name, fill="#000000", font = ("Arial", 8), anchor = "center")
+        if Offset == 2:
+            self.rec_id = canvas.create_rectangle(self.x1, self.y1-25, self.x2, self.y2-25, fill= self.color, outline = "")
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2-16, anchor=tk.CENTER,image=photo_fq_off)
+        if Offset == 3:
+            self.rec_id = canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2, fill= self.color, outline = "")
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,
+                                             image=photo_fq_off)
+        if Offset == 4:
+            self.rec_id = canvas.create_rectangle(self.x1, self.y1+25, self.x2, self.y2+25, fill= self.color, outline = "")
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2+16, anchor=tk.CENTER,image=photo_fq_off)
+
+        self.bouton = tk.Button(canvas_metro, command=lambda: toggle_station_button(self), font=("Arial", 7), text=self.name,bg="#12F04F", fg="#000000", wraplength=100, width=20, height=3)
+        self.bouton.pack()
+        self.bouton_window = canvas_metro.create_window(100 * self.Offset -160, 33 * (index - (self.Offset / 2))  + 110, anchor=tk.W, window=self.bouton)
 
         # station.canvas.delete(station.rec_id)
         # station.canvas.delete(station.text_id)
@@ -637,6 +654,7 @@ class Station:
         self.text_id = canvas.create_text(self.x1 + 32, 20, text=self.name, fill="#000000", font=("Arial", 8), anchor="center")
         canvas.delete(self.rec_id)
         self.rec_id = canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2, fill=self.color, outline="")
+        self.bouton["bg"]="#12F04F"
         canvas.delete(self.image)
         if self.quai_on == 0:
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2)/2 , anchor=tk.CENTER, image=photo_fq_off)
@@ -646,6 +664,7 @@ class Station:
     def Stop(self):
         self.open = 0
         self.color = "#FF0000"
+        self.bouton["bg"] = "#FF0000"
         canvas.delete(self.text_id)
         self.text_id = canvas.create_text(self.x1 + 32, 20, text=self.name, fill=self.color, font=("Arial", 8), anchor="center")
         canvas.delete(self.rec_id)
@@ -658,12 +677,25 @@ class Station:
     def FQ_ON(self):
         self.quai_on = 1
         canvas.delete(self.image)
-        self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_on)
+        if self.Offset == 2:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2-16, anchor=tk.CENTER, image=photo_fq_on)
+        if self.Offset == 3:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_on)
+        if self.Offset == 4:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2+16 , anchor=tk.CENTER, image=photo_fq_on)
 
     def FQ_OFF(self):
         self.quai_on = 0
         canvas.delete(self.image)
-        self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_off)
+        if self.Offset == 2:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2 - 16, anchor=tk.CENTER,
+                                             image=photo_fq_off)
+        if self.Offset == 3:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,
+                                             image=photo_fq_off)
+        if self.Offset == 4:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2 + 16, anchor=tk.CENTER,
+                                             image=photo_fq_off)
 class Feu:
     def __init__(self, canvas, X, Y, Etat):
         self.canvas = canvas
@@ -705,6 +737,10 @@ class MetroControl:
     def add_feu(self, feu):
         self.feux.append(feu)
 
+    #def stationid(self, station):
+     #   self.copy
+
+
 
     def update_trains(self):
         for train in self.trains:
@@ -738,6 +774,13 @@ def action_bouton_reprise():
 def ouvrir_fenetre():
     root_metro.deiconify()
 
+def toggle_station_button(station):
+    if station.open == 1:
+        station.Stop()
+    else:
+        station.Start()
+
+
 
 
 root = tk.Tk()
@@ -748,7 +791,7 @@ root_metro = tk.Toplevel(root)
 root_metro.title("Metro List")
 
 # Créer un canvas pour représenter la ligne de métro
-canvas = tk.Canvas(root, width=root.winfo_screenwidth()-50-root_metro.winfo_screenwidth()/5, height=root.winfo_screenheight()/3, bg="#ABABAB", scrollregion=(0, 0, 10000, root.winfo_screenheight()/3))
+canvas = tk.Canvas(root, width=root.winfo_screenwidth()-50-root_metro.winfo_screenwidth()/5, height=root.winfo_screenheight()/3, bg="#B8B8B8", scrollregion=(0, 0, 10000, root.winfo_screenheight()/3))
 
 
 # Ajouter un ascenseur horizontal
@@ -771,8 +814,8 @@ vertical_scrollbar.pack(side="left", fill="x")
 #bouton_reprise = tk.Button(canevas, command=action_bouton)
 #bouton_reprise.pack()
 
-Ligne = sys.argv[1]
-#Ligne = "14"
+#Ligne = sys.argv[1]
+Ligne = "14"
 
 if Ligne == "1":
     #Ligne 1
@@ -869,7 +912,7 @@ metro_control = MetroControl(canvas, canvas_metro)
 
 #Materialisation des terminus
 for element in liste_terminus:
-    canvas.create_rectangle(element[0]-3, element[1]-3, element[0]+3, element[1]+3, fill="#EBEBEB", outline="")
+    canvas.create_rectangle(element[0]-3, element[1]-3, element[0]+3, element[1]+3,  fill="#EBEBEB", outline="")
 
 
 #Materialisation des EGUILLAGES
@@ -887,32 +930,39 @@ global photo_fq_on
 global photo_fq_off
 image = Image.open("fq_on.PNG")
 # Redimensionner l'image à une taille de 50x50 pixels
-image = image.resize((22, 20))
+image = image.resize((16, 10))
 # Convertir l'image en format compatible avec Tkinter
 photo_fq_on = ImageTk.PhotoImage(image)
 
 image = Image.open("fq_off.PNG")
 # Redimensionner l'image à une taille de 50x50 pixels
-image = image.resize((22, 20))
+image = image.resize((16, 10))
 # Convertir l'image en format compatible avec Tkinter
 photo_fq_off = ImageTk.PhotoImage(image)
 
 
 
-for element in liste_stations:
+for  index, element in enumerate(liste_stations):
     station = Station(canvas, element[0], element[1], element[2], element[3], 1)
     metro_control.add_station(station)
+    # Créer un bouton avec la couleur rouge par défaut
+
+
+
+
 
 #for station in metro_control.stations:
 #    station.text_id = canvas.create_text(station.x1+ 32, 20, text=station.name, fill=station.color, font=("Arial", 8), anchor="center")
 #    station.rec_id = canvas.create_rectangle(station.x1, station.y1, station.x2, station.y2 , fill=station.color, outline="")
+
+
 
 # Mettre à jour les trains à intervalle régulier
 def update_trains():
     metro_control.update_trains()
     root.after(50, update_trains)
 
-
+#bouton paramétre station ligne 14
 
 update_trains()
 # Appeler la fonction update_time pour mettre à jour l'heure
@@ -922,13 +972,13 @@ canvas_metro.create_text(200, 30, text="Gestion des stations", anchor=tk.CENTER,
 canvas_metro.create_text(600, 30, text="Gestion des trains", anchor=tk.CENTER, fill="#000000", font=("Arial",14))
 canvas_metro.create_text(980, 30, text="Gestion du traffic", anchor=tk.CENTER, fill="#000000", font=("Arial", 14))
 canvas_metro.create_text(920, 80, text="gestion de tout les trains :", anchor=tk.CENTER, fill="#000000", font=("Arial", 12))
-canvas_metro.create_line(10, 10, 1150, 10, fill="#000000",width=2)
-canvas_metro.create_line(10, 50, 1150, 50, fill="#000000",width=2)
-canvas_metro.create_line(10, 10, 10, 1200, fill="#000000",width=2)
-canvas_metro.create_line(400, 10, 400, 1200, fill="#000000",width=2)
-canvas_metro.create_line(800, 10, 800, 1200, fill="#000000",width=2)
-canvas_metro.create_line(1150, 10, 1150, 1200, fill="#000000",width=2)
-canvas_metro.create_line(10, 1200, 1150, 1200, fill="#000000",width=2)
+canvas_metro.create_line(10, 10, 1400, 10, fill="#000000",width=2)
+canvas_metro.create_line(10, 50, 1400, 50, fill="#000000",width=2)
+canvas_metro.create_line(10, 10, 10, 1400, fill="#000000",width=2)
+canvas_metro.create_line(400, 10, 400, 1400, fill="#000000",width=2)
+canvas_metro.create_line(800, 10, 800, 1400, fill="#000000",width=2)
+canvas_metro.create_line(1150, 10, 1150, 1400, fill="#000000",width=2)
+canvas_metro.create_line(10, 1400, 1150, 1400, fill="#000000",width=2)
 
 
 
