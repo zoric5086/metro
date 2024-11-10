@@ -299,6 +299,7 @@ class Train:
         self.text_metro = None
         self.dir_metro = None
         self.draw_metro = None
+        self.draw_metro_name = None
         self.nom_metro = None
         self.line_id = None
         self.speed = speed
@@ -356,6 +357,7 @@ class Train:
                 self.arret = self.arret + 1
                 if self.arret > station.duree_stop and self.color != "#000000":
                     self.arret = 0
+                    self.arret_station = 0
                     self.speed = self.orig_speed
                     station.FQ_OFF()
 
@@ -374,16 +376,16 @@ class Train:
 
         #gestion des feux
         for feu in metro_control.feux:
-            if self.speed < 0 and self.y1 == feu.Y and self.x1 < feu.X < self.x2 :
+            if self.speed < 0 and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.x1 < feu.X < self.x2 :
                 feu.Stop(self.nom_metro)
-            elif self.speed > 0 and self.y1 == feu.Y and self.x1 < feu.X < self.x2:
+            elif self.speed > 0 and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.x1 < feu.X < self.x2:
                 feu.Stop(self.nom_metro)
-            elif self.nom_metro == feu.TrainID and self.y1 == feu.Y and self.speed > 0 and self.x1 > feu.X + 120:
+            elif self.nom_metro == feu.TrainID and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.speed > 0 and self.x1 > feu.X + 120:
                 #not (( self.x1 < feu.X < self.x2) or ( self.x1 > feu.X > self.x2) ):
                 feu.Start()
-            elif self.nom_metro == feu.TrainID and self.y1 == feu.Y and self.speed < 0 and self.x2 < feu.X - 120:
+            elif self.nom_metro == feu.TrainID and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.speed < 0 and self.x2 < feu.X - 120:
                 feu.Start()
-            elif self.nom_metro == feu.TrainID and self.y1 != feu.Y:
+            elif self.nom_metro == feu.TrainID and not (self.y1 - 8 <= feu.Y <= self.y1 + 8):
                 feu.Start()
             #print(abs(self.x1 - feu.X))
 
@@ -549,7 +551,7 @@ class Train:
                     self.speed = 0
                     self.arret = self.arret + 1
                     # print(self.arret)
-                    if self.arret > 120 and self.color != "#000000":
+                    if self.arret > 60 and self.color != "#000000":
                         self.arret = 0
                         self.speed = self.orig_speed*(-1)
                         self.orig_speed = self.speed
@@ -557,11 +559,18 @@ class Train:
 
         if self.line_id:
             self.canvas.coords(self.line_id, self.x1, self.y1, self.x2, self.y2)
+            self.canvas.delete(self.draw_metro_name)
+            self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2)/2, self.y1, text=self.name, fill="#000000",
+                                                           font=("Arial", 8))
             self.canvas.itemconfig(self.line_id, fill=self.color)
+
+
 
             self.canvas_metro.delete(self.draw_metro)
             self.draw_metro = self.canvas_metro.create_line(500, (self.order +1) * 20 + 50, 550, (self.order +1) * 20 + 50, fill=self.color,
                                           width=5)
+
+
             if self.speed > 0:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
@@ -604,6 +613,8 @@ class Train:
                 #canvas.create_window(20, (self.order +1) * 20 + 50, anchor=tk.CENTER, window=frame_bouton)
         else:
             self.line_id = self.canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill=self.color, width=5)
+            self.canvas.delete(self.draw_metro_name)
+            self.draw_metro_name = self.canvas.create_text(self.x1, self.y1, text=self.name,fill="#000000",font=("Arial", 8))
             self.canvas_metro.delete(self.nom_metro)
 
             self.nom_metro = self.canvas_metro.create_text(450, (self.order +1) * 20 + 50 , text=self.name, fill="#000000",
@@ -623,7 +634,7 @@ class Station:
         self.quai_on = 1
         self.duree_stop = DureeStop
         self.y1 = Offset * 30 + 10
-        self.x2 = X + 45
+        self.x2 = X + 50
         self.y2 = Offset * 30 + 40
         self.color = "#7A7A7A"
         self.text_id = canvas.create_text(self.x1 + 32, 30, text=self.name, fill="#000000", font = ("Arial", 8), anchor = "center")
@@ -632,8 +643,7 @@ class Station:
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2-16, anchor=tk.CENTER,image=photo_fq_off)
         if Offset == 3:
             self.rec_id = canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2, fill= self.color, outline = "")
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,
-                                             image=photo_fq_off)
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_off)
         if Offset == 4:
             self.rec_id = canvas.create_rectangle(self.x1, self.y1+25, self.x2, self.y2+25, fill= self.color, outline = "")
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2+16, anchor=tk.CENTER,image=photo_fq_off)
@@ -697,28 +707,54 @@ class Station:
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2 + 16, anchor=tk.CENTER,
                                              image=photo_fq_off)
 class Feu:
-    def __init__(self, canvas, X, Y, Etat):
+    def __init__(self, canvas, name_feu, X, Offset, Etat):
         self.canvas = canvas
         self.X = X
-        self.Y = Y
+        if Offset == 1:
+            self.Y = 100 - 8
+        if Offset == 2:
+            self.Y = 110 - 4
+        if Offset == 3:
+            self.Y = 120 + 2
+        if Offset == 4:
+            self.Y = 130 + 8
+        if Offset == 5:
+            self.Y = 190 + 8
+        if Offset == 6:
+            self.Y = 220 + 8
+        if Offset == 7:
+            self.Y = 250 + 8
+        if Offset == 8:
+            self.Y = 280 + 8
+
         self.Etat = Etat
         self.TrainID = None
+        self.nom_feu = None
+        self.name_feu = name_feu
         # image_feu_vert
         if Etat == 2:
-            self.image = canvas.create_image(self.X, self.Y - 12 , anchor=tk.CENTER, image=photo_feu_rouge)
+            self.image = canvas.create_image(self.X, self.Y, anchor=tk.CENTER, image=photo_feu_rouge)
         else:
-            self.image = canvas.create_image(self.X, self.Y - 12 , anchor=tk.CENTER, image=photo_feu_vert)
+            self.image = canvas.create_image(self.X, self.Y, anchor=tk.CENTER, image=photo_feu_vert)
+
+        #for element in liste_feu_traffic:
+            #self.nom_feu = self.canvas.create_text(self.Y +5 , text=self.name_feu, fill="#000000",  font=("Arial", 8))
+            #self.text_id = canvas.create_text(self.y1 + 5, text=self.name_feu, fill="#000000", font = ("Arial", 8), anchor = "center")
+        self.name_feu = canvas.create_text(self.X + 15, self.Y, text=self.name_feu, fill="#000000", font = ("Arial", 8), anchor = "center")
+
+
+
 
     def Start(self):
         self.Etat = 1
         canvas.delete(self.image)
-        self.image = canvas.create_image(self.X, self.Y - 12 , anchor=tk.CENTER, image=photo_feu_vert)
+        self.image = canvas.create_image(self.X, self.Y , anchor=tk.CENTER, image=photo_feu_vert)
 
     def Stop(self, TrainID):
         self.Etat = 2
         self.TrainID = TrainID
         canvas.delete(self.image)
-        self.image = canvas.create_image(self.X, self.Y - 12 , anchor=tk.CENTER, image=photo_feu_rouge)
+        self.image = canvas.create_image(self.X, self.Y , anchor=tk.CENTER, image=photo_feu_rouge)
 
 class MetroControl:
     def __init__(self, canvas, canvas_metro):
@@ -882,7 +918,7 @@ if Ligne == "0":
     liste_metro = ClasseLigne0.liste_metro
     liste_lignes = ClasseLigne0.liste_lignes
     liste_depot_eguillage = ClasseLigne0.liste_depot_eguillage
-    liste_depot_ligne = ClasseLigne0.liste_depot_eguillage
+    liste_depot_ligne = ClasseLigne0.liste_depot_ligne
     liste_feu_traffic = ClasseLigne0.liste_feu_traffic
 
 #Materialisation des terminus
@@ -1050,12 +1086,12 @@ global photo_feu_rouge
 # Charger l'image
 image = Image.open("feu_vert.jpg")
 #Redimensionner l'image à une taille de 50x50 pixels
-image = image.resize((20, 20))
+image = image.resize((5, 5))
 # Convertir l'image en format compatible avec Tkinter
 photo_feu_vert = ImageTk.PhotoImage(image)
 image = Image.open("feu_rouge.jpg")
 # Redimensionner l'image à une taille de 50x50 pixels
-image = image.resize((20, 20))
+image = image.resize((5, 5))
 # Convertir l'image en format compatible avec Tkinter
 photo_feu_rouge = ImageTk.PhotoImage(image)
 
@@ -1064,7 +1100,7 @@ photo_feu_rouge = ImageTk.PhotoImage(image)
 
 
 for element in liste_feu_traffic:
-    feu = Feu(canvas,element[0], element[1],element[2])
+    feu = Feu(canvas, element[0], element[1], element[2], element[3])
     metro_control.add_feu(feu)
 
 
