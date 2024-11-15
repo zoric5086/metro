@@ -558,19 +558,23 @@ class Train:
                         self.x2 -= 1
 
 
-        for element in liste_terminus:
-            if element[0] - abs(self.orig_speed / 2) <= self.x1 < element[0] + abs(self.orig_speed / 2) :
-                if self.y1 == element[1]:
-                    if self.speed != 0:
-                        print(self.name + " " + element[2])
-                    self.speed = 0
-                    self.arret = self.arret + 1
-                    # print(self.arret)
-                    if self.arret > 60 and self.color != "#000000":
-                        self.arret = 0
-                        self.speed = self.orig_speed*(-1)
-                        self.orig_speed = self.speed
-                        self.move()
+        for terminus in metro_control.terminus:
+            if terminus.X - abs(self.orig_speed / 2) <= self.x1 < terminus.X + abs(self.orig_speed / 2) :
+                if self.y1 == terminus.Y:
+                    if terminus.Etat == 1:
+                        if self.speed != 0:
+                            print(self.name + " " + terminus.Name)
+                        self.speed = 0
+                        self.arret = self.arret + 1
+                            # print(self.arret)
+                        if self.arret > 60 and self.color != "#000000":
+                            self.arret = 0
+                            self.speed = self.orig_speed * (-1)
+                            self.orig_speed = self.speed
+                            self.move()
+                    elif terminus.Etat == 0:
+                        pass
+
 
 
         if self.line_id:
@@ -657,8 +661,6 @@ class Train:
             self.nom_metro = self.canvas_metro.create_text(450, (self.order + 1) * 20 + 50, text=self.name,
                                                            fill="#000000",
                                                            font=("Arial", 8))
-
-
 
 
 
@@ -785,8 +787,6 @@ class Feu:
         self.name_feu = canvas.create_text(self.X + 15, self.Y, text=self.name_feu, fill="#000000", font = ("Arial", 8), anchor = "center")
 
 
-
-
     def Start(self):
         self.Etat = 1
         canvas.delete(self.image)
@@ -798,6 +798,49 @@ class Feu:
         canvas.delete(self.image)
         self.image = canvas.create_image(self.X, self.Y , anchor=tk.CENTER, image=photo_feu_rouge)
 
+class Terminus:
+    def __init__(self, canvas, X, Y, Name, Etat, index):
+        self.canvas = canvas
+        self.X = X
+        self.Y = Y
+        self.Name = Name
+        self.Etat = Etat
+        self.bouton = None
+        self.bouton_window = None
+        self.index = index
+        self.draw = None
+
+        #canvas.create_rectangle(element[0] - 3, element[1] - 3, element[0] + 3, element[1] + 3, fill="", outline="")
+        if self.Etat == 0:
+            self.bouton = tk.Button(canvas_metro, command=lambda: toggle_terminus_button(self), font=("Arial", 7),text=self.Name, bg="#FF0000", fg="#000000", wraplength=100, width=20, height=2)
+            self.bouton.pack()
+            self.bouton_window = canvas_metro.create_window(1000, 33 * self.index + 160, anchor=tk.W,window=self.bouton)
+        if self.Etat == 1:
+            self.draw = canvas.create_rectangle(self.X - 3, self.Y - 3, self.X + 3, self.Y + 3,fill="#000000", outline="")
+            self.bouton = tk.Button(canvas_metro, command=lambda: toggle_terminus_button(self), font=("Arial", 7), text=self.Name, bg="#12F04F", fg="#000000", wraplength=100, width=20, height=2)
+            self.bouton.pack()
+            self.bouton_window = canvas_metro.create_window(820, 33 * self.index + 160, anchor=tk.W, window=self.bouton)
+
+    def Start(self):
+        self.Etat = 1
+        canvas_metro.delete(self.bouton_window)
+        self.bouton = tk.Button(canvas_metro, command=lambda: toggle_terminus_button(self), font=("Arial", 7), text=self.Name, bg="#12F04F", fg="#000000", wraplength=100, width=20, height=2)
+        self.bouton.pack()
+        self.bouton_window = canvas_metro.create_window(820, 33 * self.index + 160, anchor=tk.W, window=self.bouton)
+        self.draw = canvas.create_rectangle(self.X - 3, self.Y - 3, self.X + 3, self.Y + 3,fill="#000000", outline="")
+
+
+    def Stop(self):
+        self.Etat = 0
+        canvas.delete(self.draw)
+        canvas_metro.delete(self.bouton_window)
+        self.bouton = tk.Button(canvas_metro, command=lambda: toggle_terminus_button(self), font=("Arial", 7), text=self.Name, bg="#FF0000", fg="#000000", wraplength=100, width=20, height=2)
+        self.bouton.pack()
+        self.bouton_window = canvas_metro.create_window(1000, 33 * self.index + 160, anchor=tk.W, window=self.bouton)
+
+
+
+
 class MetroControl:
     def __init__(self, canvas, canvas_metro):
         self.canvas = canvas
@@ -805,6 +848,7 @@ class MetroControl:
         self.trains = []
         self.stations = []
         self.feux = []
+        self.terminus = []
 
     def add_train(self, train):
         self.trains.append(train)
@@ -814,6 +858,9 @@ class MetroControl:
 
     def add_feu(self, feu):
         self.feux.append(feu)
+
+    def add_terminus(self, terminus):
+        self.terminus.append(terminus)
 
     #def stationid(self, station):
      #   self.copy
@@ -857,6 +904,12 @@ def toggle_station_button(station):
         station.Stop()
     else:
         station.Start()
+
+def toggle_terminus_button(terminus):
+    if terminus.Etat == 1:
+        terminus.Stop()
+    else:
+        terminus.Start()
 
 
 
@@ -963,11 +1016,9 @@ if Ligne == "0":
     liste_depot_ligne = ClasseLigne0.liste_depot_ligne
     liste_feu_traffic = ClasseLigne0.liste_feu_traffic
 
-#Materialisation des terminus
-for element in liste_terminus:
-    canvas.create_rectangle(element[0]-3, element[1]-3, element[0]+3, element[1]+3, fill="#000000", outline="")
 
-#Materialisation des terminus
+
+
 
 
 #Materialisation des lignes
@@ -989,8 +1040,10 @@ metro_control = MetroControl(canvas, canvas_metro)
 
 
 #Materialisation des terminus
-for element in liste_terminus:
-    canvas.create_rectangle(element[0]-3, element[1]-3, element[0]+3, element[1]+3,  fill="#EBEBEB", outline="")
+for index, element in enumerate(liste_terminus):
+    # Materialisation des terminus
+    terminus = Terminus(canvas, element[0], element[1], element[2], element[3], index)
+    metro_control.add_terminus(terminus)
 
 
 #Materialisation des EGUILLAGES
@@ -1050,6 +1103,8 @@ canvas_metro.create_text(200, 30, text="Gestion des stations", anchor=tk.CENTER,
 canvas_metro.create_text(600, 30, text="Gestion des trains", anchor=tk.CENTER, fill="#000000", font=("Arial",14))
 canvas_metro.create_text(980, 30, text="Gestion du traffic", anchor=tk.CENTER, fill="#000000", font=("Arial", 14))
 canvas_metro.create_text(920, 80, text="gestion de tout les trains :", anchor=tk.CENTER, fill="#000000", font=("Arial", 12))
+canvas_metro.create_text(860, 120, text="Terminus", anchor=tk.CENTER, fill="#000000", font=("Arial", 12))
+canvas_metro.create_text(1050, 120, text="Service provisoire", anchor=tk.CENTER, fill="#000000", font=("Arial", 12))
 canvas_metro.create_line(10, 10, 1400, 10, fill="#000000",width=2)
 canvas_metro.create_line(10, 50, 1400, 50, fill="#000000",width=2)
 canvas_metro.create_line(10, 10, 10, 1400, fill="#000000",width=2)

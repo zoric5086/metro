@@ -64,7 +64,7 @@ class ClasseLigne0():
     liste_eguillages.append(( 6960, 130,6990, 100, 0, "Eg OLYMPIADES3"))
     liste_eguillages.append((6960, 100, 6990, 130, 0, "Eg OLYMPIADES4"))
     liste_eguillages.append(( 7360, 100,7390, 130, 0, "Eg MAISON BLANCHE1"))
-    liste_eguillages.append(( 8160, 100,8190, 130, 0, "Eg VILLEJUIF GUSTAVE ROUSSY1"))
+    liste_eguillages.append(( 7820, 100,7850, 130, 0, "Eg VILLEJUIF GUSTAVE ROUSSY1"))
     liste_eguillages.append(( 9360, 100,9390, 130, 0, "Eg THAIS ORLY1"))
     liste_eguillages.append(( 9770, 130,9800, 100, 1, "Eg AEROPORT D'ORLY1"))
     liste_eguillages.append((9770, 100, 9800, 130, 0, "Eg AEROPORT D'ORLY2"))
@@ -119,7 +119,7 @@ class ClasseLigne0():
     liste_depot_eguillage.append((1095, 220, 1125, 250, 0, "Eg D6","#CCCCCC"))
     liste_depot_eguillage.append((1125, 250, 1155, 280, 0, "Eg D7","#CCCCCC"))
     liste_depot_eguillage.append((1155, 280, 1185, 310, 0, "Eg D7","#CCCCCC"))
-    liste_eguillages.append((7060, 130, 7090, 160, 0, "Eg OLYMPIADES","#CCCCCC"))
+    liste_eguillages.append((7030, 130, 7060, 160, 0, "Eg OLYMPIADES","#CCCCCC"))
 
 
 
