@@ -1,47 +1,47 @@
 class ClasseLigne0():
     #Position Station(x, nom, ligne de haut en base)
     liste_stations = []
-    liste_stations.append((250, "SAINT DENIS PLEYEL Q1", 2, 350))
-    liste_stations.append((250, "SAINT DENIS PLEYEL Q2", 4, 350))
-    liste_stations.append((650, "MAIRIE DE ST OUEN Q1", 2, 280))
-    liste_stations.append((650, "MAIRIE DE ST OUEN Q2", 4, 280))
-    liste_stations.append((1145, "SAINT OUEN Q1", 2, 240))
-    liste_stations.append((1145, "SAINT OUEN Q2", 4, 240))
-    liste_stations.append((1675, "PORTE DE CLICHY Q1", 2, 225))
-    liste_stations.append((1675, "PORTE DE CLICHY Q2", 4, 225))
-    liste_stations.append((2235, "PONT CARDINET Q1", 2, 225))
-    liste_stations.append((2235, "PONT CARDINET Q2", 4, 225))
-    liste_stations.append((2675, "SAINT LAZARE Q1", 2, 330))
-    liste_stations.append((2675, "SAINT LAZARE Q2", 4, 330))
-    liste_stations.append((3135, "MADELEINE Q1", 2, 330))
-    liste_stations.append((3135, "MADELEINE Q2", 4, 330))
-    liste_stations.append((3655, "PYRAMIDES Q1",2, 300))
-    liste_stations.append((3655, "PYRAMIDES Q2", 4, 300))
-    liste_stations.append((4215, "CHATELET Q1",2, 350))
-    liste_stations.append((4215, "CHATELET Q2", 4, 350))
-    liste_stations.append((4875, "GARE DE LYON Q1",3, 350))
-    liste_stations.append((5335, "BERCY Q1",2, 280))
-    liste_stations.append((5335, "BERCY Q2", 4, 280))
-    liste_stations.append((5895, "COUR ST EMILLION Q1",2, 225))
-    liste_stations.append((5895, "COUR ST EMILLION Q2", 4, 225))
-    liste_stations.append((6472, "BIBLIOTHEQUE FRANCOIS MITTERRAND Q1",2, 300))
-    liste_stations.append((6472, "BIBLIOTHEQUE FRANCOIS MITTERRAND Q2", 4, 300))
-    liste_stations.append((6869, "OLYMPIADES Q1",2, 280))
-    liste_stations.append((6869, "OLYMPIADES Q2", 4, 280))
-    liste_stations.append((7269, "MAISON BLANCHE Q1",2, 280))
-    liste_stations.append((7269, "MAISON BLANCHE Q2", 4, 280))
-    liste_stations.append((7669, "HOPITAL BICETRE Q1",2, 350))
-    liste_stations.append((7669, "HOPITAL BICETRE Q2", 4, 350))
-    liste_stations.append((8069, "VILLEJUIF GUSTAVE ROUSSY Q1",2, 280, 0))
-    liste_stations.append((8069, "VILLEJUIF GUSTAVE ROUSSY Q2",4,280, 0))
-    liste_stations.append((8469, "L'HAI LES ROSES Q1",2, 350))
-    liste_stations.append((8469, "L'HAI LES ROSES Q2", 4, 350))
-    liste_stations.append((8869, "CHEVILLY LARUE Q1",2, 280))
-    liste_stations.append((8869, "CHEVILLY LARUE Q2", 4, 280))
-    liste_stations.append((9269, "THIAIS ORLY Q1",2, 280))
-    liste_stations.append((9269, "THIAIS ORLY Q2", 4, 280))
-    liste_stations.append((9669, "AEROPORT D'ORLY Q1",2, 350))
-    liste_stations.append((9669, "AEROPORT D'ORLY Q2", 4, 350))
+    liste_stations.append((250, "SAINT DENIS PLEYEL Q1", 2, 100))
+    liste_stations.append((250, "SAINT DENIS PLEYEL Q2", 4, 100))
+    liste_stations.append((650, "MAIRIE DE ST OUEN Q1", 2, 100))
+    liste_stations.append((650, "MAIRIE DE ST OUEN Q2", 4, 100))
+    liste_stations.append((1145, "SAINT OUEN Q1", 2, 100))
+    liste_stations.append((1145, "SAINT OUEN Q2", 4, 100))
+    liste_stations.append((1675, "PORTE DE CLICHY Q1", 2, 100))
+    liste_stations.append((1675, "PORTE DE CLICHY Q2", 4, 100))
+    liste_stations.append((2235, "PONT CARDINET Q1", 2, 100))
+    liste_stations.append((2235, "PONT CARDINET Q2", 4, 100))
+    liste_stations.append((2675, "SAINT LAZARE Q1", 2, 100))
+    liste_stations.append((2675, "SAINT LAZARE Q2", 4, 100))
+    liste_stations.append((3135, "MADELEINE Q1", 2, 100))
+    liste_stations.append((3135, "MADELEINE Q2", 4, 100))
+    liste_stations.append((3655, "PYRAMIDES Q1",2, 100))
+    liste_stations.append((3655, "PYRAMIDES Q2", 4, 100))
+    liste_stations.append((4215, "CHATELET Q1",2, 100))
+    liste_stations.append((4215, "CHATELET Q2", 4, 100))
+    liste_stations.append((4875, "GARE DE LYON Q1",3, 100))
+    liste_stations.append((5335, "BERCY Q1",2, 100))
+    liste_stations.append((5335, "BERCY Q2", 4, 100))
+    liste_stations.append((5895, "COUR ST EMILLION Q1",2, 100))
+    liste_stations.append((5895, "COUR ST EMILLION Q2", 4, 100))
+    liste_stations.append((6472, "BIBLIOTHEQUE FRANCOIS MITTERRAND Q1",2, 100))
+    liste_stations.append((6472, "BIBLIOTHEQUE FRANCOIS MITTERRAND Q2", 4, 100))
+    liste_stations.append((6869, "OLYMPIADES Q1",2, 100))
+    liste_stations.append((6869, "OLYMPIADES Q2", 4, 100))
+    liste_stations.append((7269, "MAISON BLANCHE Q1",2, 100))
+    liste_stations.append((7269, "MAISON BLANCHE Q2", 4, 100))
+    liste_stations.append((7669, "HOPITAL BICETRE Q1",2, 100))
+    liste_stations.append((7669, "HOPITAL BICETRE Q2", 4, 100))
+    liste_stations.append((8069, "VILLEJUIF GUSTAVE ROUSSY Q1",2, 100, 0))
+    liste_stations.append((8069, "VILLEJUIF GUSTAVE ROUSSY Q2",4,100, 0))
+    liste_stations.append((8469, "L'HAI LES ROSES Q1",2, 100))
+    liste_stations.append((8469, "L'HAI LES ROSES Q2", 4, 100))
+    liste_stations.append((8869, "CHEVILLY LARUE Q1",2, 100))
+    liste_stations.append((8869, "CHEVILLY LARUE Q2", 4, 100))
+    liste_stations.append((9269, "THIAIS ORLY Q1",2, 100))
+    liste_stations.append((9269, "THIAIS ORLY Q2", 4, 100))
+    liste_stations.append((9669, "AEROPORT D'ORLY Q1",2, 100))
+    liste_stations.append((9669, "AEROPORT D'ORLY Q2", 4, 100))
     liste_eguillages = []
     liste_eguillages.append((160,130,190, 100, 2, "Eg SAINT DENIS PLEYEL1"))
     liste_eguillages.append((160, 100, 190, 130, 0, "Eg SAINT DENIS PLEYEL2"))
@@ -95,7 +95,7 @@ class ClasseLigne0():
 
     liste_metro = []
     #train direction chateau de vincennes
-    liste_metro.append(("Train 1",100, 4, 80, 1,"#EB0004" ))
+    liste_metro.append(("1",500, -4, 80, 1,"#EB0004" ))
 
 
 
@@ -137,119 +137,157 @@ class ClasseLigne0():
     liste_depot_ligne.append((1185, 310, 1395, 310, "#CCCCCC", 2))
     liste_depot_ligne.append((7090, 160, 7150, 160, "#CCCCCC", 2))
 
+    # feu equillage depot
     liste_feu_traffic = []
-    # feu eguillage terminus saint denis pleyel
-    liste_feu_traffic.append((200, 100, 1))
-    liste_feu_traffic.append((200, 130, 1))
-    liste_feu_traffic.append((150, 100, 1))
-    liste_feu_traffic.append((150, 130, 1))
-    # feu terminus saint denis pleyel direction saint denis pleyel
-    liste_feu_traffic.append((250, 100, 1))
-    liste_feu_traffic.append((320, 100, 1))
-    # feu terminus saint denis pleyel direction aéroport d'orly
-    liste_feu_traffic.append((250, 130, 1))
-    liste_feu_traffic.append((320, 130, 1))
-    # feu eguillage terminus la mairie de saint ouen
-    liste_feu_traffic.append((560, 100, 1))
-    liste_feu_traffic.append((560, 130, 1))
-    #feu d'arriver mairie de saint ouen direction mso
-    liste_feu_traffic.append((720, 100, 1))
-    #feu d'arriver mairie de saint ouen direction o
-    liste_feu_traffic.append((640, 130, 1))
-    #feu départ mairie de saint ouen direction mso
-    liste_feu_traffic.append((640, 100, 1))
-    #feu départ mairie de saint ouen direction o
-    liste_feu_traffic.append((730, 130, 1))
-    #feu départ saint ouen direction mso
-    liste_feu_traffic.append((1145, 100, 1))
-    #feu départ saint ouen direction o
-    liste_feu_traffic.append((1205, 130, 1))
-    #feu départ porte de clichy direction mso
-    liste_feu_traffic.append((1675, 100, 1))
-    #feu départ porte de clichy direction o
-    liste_feu_traffic.append((1735, 130, 1))
-    #feu départ pont cardinet direction mso
-    liste_feu_traffic.append((2235, 100, 1))
-    #feu départ pont cardinet direction o
-    liste_feu_traffic.append((2295, 130, 1))
-    #feu départ saint lazare direction mso
-    liste_feu_traffic.append((2675, 100, 1))
-    #feu départ saint lazare direction o
-    liste_feu_traffic.append((2735, 130, 1))
-    #feu départ madeleine direction mso
-    liste_feu_traffic.append((3135, 100, 1))
-    #feu départ madeleine direction o
-    liste_feu_traffic.append((3195, 130, 1))
-    #feu départ pyramide direction mso
-    liste_feu_traffic.append((3655, 100, 1))
-    #feu départ pyramide direction o
-    liste_feu_traffic.append((3715, 130, 1))
-    #feu départ chatelet direction mso
-    liste_feu_traffic.append((4215, 100, 1))
-    #feu départ chatelet direction o
-    liste_feu_traffic.append((4275, 130, 1))
-    #feu départ gare de lyon direction mso
-    liste_feu_traffic.append((4875, 100, 1))
-    #feu départ gare de lyon direction o
-    liste_feu_traffic.append((4935, 130, 1))
-    #feu départ bercy direction mso
-    liste_feu_traffic.append((5335, 100, 1))
-    #feu départ bercy direction o
-    liste_feu_traffic.append((5395, 130, 1))
-    #feu départ cour st emillion directio1 mso
-    liste_feu_traffic.append((5895, 100, 1))
-    #feu départ cour st emillion direction o
-    liste_feu_traffic.append((5955, 130, 1))
-    #feu départ bibliotheque francois mitterand direction mso
-    liste_feu_traffic.append((6472, 100, 1))
-    #feu départ bibliotheque francois mitterand direction o
-    liste_feu_traffic.append((6532, 130, 1))
-    #feu départ olympiade direction mso
-    liste_feu_traffic.append((6869, 100, 1))
-    #feu départ olympiade direction o
-    liste_feu_traffic.append((6929, 130, 1))
-    #feu arrivé olympiade direction mso
-    liste_feu_traffic.append((6929, 100, 1))
-    #feu arrivé olympiade direction o
-    liste_feu_traffic.append((6869, 130, 1))
-    #feu eguillage olympiade
-    liste_feu_traffic.append((7000, 100, 1))
-    liste_feu_traffic.append((7000, 130, 1))
-    #feu eguillage maison blanche
-    liste_feu_traffic.append((7269, 100, 1))
-    liste_feu_traffic.append((7330, 130, 1))
-    #feu eguillage hopital bicetre
-    liste_feu_traffic.append((7669, 100, 1))
-    liste_feu_traffic.append((7730, 130, 1))
-    #feu eguillage villejuif gustave roussy
-    liste_feu_traffic.append((8069, 100, 1))
-    liste_feu_traffic.append((8130, 130, 1))
-    #feu eguillage l'hai les roses
-    liste_feu_traffic.append((8469, 100, 1))
-    liste_feu_traffic.append((8530, 130, 1))
-    #feu eguillage chevilly la rue
-    liste_feu_traffic.append((8869, 100, 1))
-    liste_feu_traffic.append((8930, 130, 1))
-    #feu eguillage thiais orly
-    liste_feu_traffic.append((9269, 100, 1))
-    liste_feu_traffic.append((9330, 130, 1))
-    liste_feu_traffic.append((9330, 100, 1))
-    liste_feu_traffic.append((9269, 130, 1))
-    #feu eguillage aéroport d'orly direction aéroport d'orly
-    liste_feu_traffic.append((9669, 130, 1))
-    liste_feu_traffic.append((9730, 130, 1))
-    #feu eguillage aéroport d'orly direction saint denis pleyel
-    liste_feu_traffic.append((9669, 100, 1))
-    liste_feu_traffic.append((9730, 100, 1))
-    #feu eguillage terminus aéroport d'orly
-    liste_feu_traffic.append((9830, 100, 1))
-    liste_feu_traffic.append((9760, 100, 1))
-    liste_feu_traffic.append((9830, 130, 1))
-    liste_feu_traffic.append((9760, 130, 1))
-    #feu depot
-    liste_feu_traffic.append((985, 190, 1))
-    liste_feu_traffic.append((985, 220, 1))
-    liste_feu_traffic.append((1100, 190, 1))
-    liste_feu_traffic.append((1100, 220, 1))
+    liste_feu_traffic.append(("543", 840, 2, 1))
+    liste_feu_traffic.append(("521", 840, 4, 1))
+    # feu départ saint ouen direction sdp
+    liste_feu_traffic.append(("556", 1025, 1, 1))
+    # feu départ saint ouen direction ao
+    liste_feu_traffic.append(("553", 1085, 4, 1))
+    # feu arrivé saint ouen direction sdp
+    liste_feu_traffic.append(("554", 1085, 1, 1))
+    # feu arrivé saint ouen direction ao
+    liste_feu_traffic.append(("551", 1025, 4, 1))
+
+    liste_feu_traffic.append(("552", 1355, 1, 1))
+
+    # feu départ porte de clichy direction mso
+    liste_feu_traffic.append(("314", 1445, 1, 1))
+    # feu départ porte de clichy direction o
+    liste_feu_traffic.append(("314", 1505, 4, 1))
+    # feu arrivé porte de clichy direction mso
+    liste_feu_traffic.append(("314", 1505, 1, 1))
+    # feu arrivé porte de clichy direction o
+    liste_feu_traffic.append(("314", 1445, 4, 1))  # changement a continué:
+    # feu départ pont cardinet direction mso
+    liste_feu_traffic.append(("314", 1695, 1, 1))
+    # feu départ pont cardinet direction o
+    liste_feu_traffic.append(("314", 1755, 4, 1))
+    # feu arrivé pont cardinet direction mso
+    liste_feu_traffic.append(("314", 1755, 1, 1))
+    # feu arrivé pont cardinet direction o
+    liste_feu_traffic.append(("314", 1695, 4, 1))
+    # feu départ saint lazare direction mso
+    liste_feu_traffic.append(("314", 2115, 1, 1))
+    # feu départ saint lazare direction o
+    liste_feu_traffic.append(("314", 2175, 4, 1))
+    # feu arrivé saint lazare direction mso
+    liste_feu_traffic.append(("314", 2175, 1, 1))
+    # feu arrivé saint lazare direction o
+    liste_feu_traffic.append(("314", 2115, 4, 1))
+    # feu départ madeleine direction mso
+    liste_feu_traffic.append(("314", 2385, 1, 1))
+    # feu départ madeleine direction o
+    liste_feu_traffic.append(("314", 2445, 4, 1))
+    # feu arrivé madeleine direction mso
+    liste_feu_traffic.append(("314", 2445, 1, 1))
+    # feu arrivé madeleine direction o
+    liste_feu_traffic.append(("314", 2385, 4, 1))
+    # feu départ pyramide direction mso
+    liste_feu_traffic.append(("314", 3655, 1, 1))
+    # feu départ pyramide direction o
+    liste_feu_traffic.append(("314", 3715, 4, 1))
+    # feu arrivé pyramide direction
+    liste_feu_traffic.append(("314", 3715, 1, 1))
+    # feu arrivé pyramide direction o
+    liste_feu_traffic.append(("314", 3655, 4, 1))
+    # feu départ chatelet direction mso
+    liste_feu_traffic.append(("314", 4215, 1, 1))
+    # feu départ chatelet direction o
+    liste_feu_traffic.append(("314", 4275, 4, 1))
+    # feu arrivé chatelet direction mso
+    liste_feu_traffic.append(("314", 4275, 1, 1))
+    # feu arrivé chatelet direction o
+    liste_feu_traffic.append(("314", 4215, 4, 1))
+    # feu départ gare de lyon direction mso
+    liste_feu_traffic.append(("314", 4875, 1, 1))
+    # feu départ gare de lyon direction o
+    liste_feu_traffic.append(("314", 4935, 4, 1))
+    # feu arrivé gare de lyon direction mso
+    liste_feu_traffic.append(("314", 4935, 1, 1))
+    # feu arrivé gare de lyon direction o
+    liste_feu_traffic.append(("314", 4875, 4, 1))
+    # feu départ bercy direction mso
+    liste_feu_traffic.append(("314", 5335, 1, 1))
+    # feu départ bercy direction o
+    liste_feu_traffic.append(("314", 5395, 4, 1))
+    # feu arrivé bercy direction mso
+    liste_feu_traffic.append(("314", 5395, 1, 1))
+    # feu arrivé bercy direction o
+    liste_feu_traffic.append(("314", 5335, 4, 1))
+    # feu départ cour st emillion directio1 mso
+    liste_feu_traffic.append(("314", 5895, 1, 1))
+    # feu départ cour st emillion direction o
+    liste_feu_traffic.append(("314", 5955, 4, 1))
+    # feu arrivé cour st emillion directio1 mso
+    liste_feu_traffic.append(("314", 5955, 1, 1))
+    # feu arrivé cour st emillion direction o
+    liste_feu_traffic.append(("314", 5895, 4, 1))
+    # feu départ bibliotheque francois mitterand direction mso
+    liste_feu_traffic.append(("314", 6472, 1, 1))
+    # feu départ bibliotheque francois mitterand direction o
+    liste_feu_traffic.append(("314", 6532, 4, 1))
+    # feu arrivé bibliotheque francois mitterand direction mso
+    liste_feu_traffic.append(("314", 6532, 1, 1))
+    # feu arrivé bibliotheque francois mitterand direction o
+    liste_feu_traffic.append(("314", 6472, 4, 1))
+    # feu départ olympiade direction mso
+    liste_feu_traffic.append(("314", 6869, 1, 1))
+    # feu départ olympiade direction o
+    liste_feu_traffic.append(("314", 6929, 4, 1))
+    # feu arrivé olympiade direction mso
+    liste_feu_traffic.append(("314", 6929, 1, 1))
+    # feu arrivé olympiade direction o
+    liste_feu_traffic.append(("314", 6869, 4, 1))
+    # feu eguillage olympiade
+    liste_feu_traffic.append(("314", 7000, 1, 1))
+    liste_feu_traffic.append(("314", 7000, 4, 1))
+    # feu eguillage maison blanche
+    liste_feu_traffic.append(("314", 7269, 1, 1))
+    liste_feu_traffic.append(("314", 7330, 4, 1))
+    liste_feu_traffic.append(("314", 7330, 1, 1))
+    liste_feu_traffic.append(("314", 7269, 4, 1))
+    # feu eguillage hopital bicetre
+    liste_feu_traffic.append(("314", 7669, 1, 1))
+    liste_feu_traffic.append(("314", 7730, 4, 1))
+    liste_feu_traffic.append(("314", 7730, 1, 1))
+    liste_feu_traffic.append(("314", 7669, 4, 1))
+    # feu eguillage villejuif gustave roussy
+    liste_feu_traffic.append(("314", 8069, 1, 1))
+    liste_feu_traffic.append(("314", 8130, 4, 1))
+    liste_feu_traffic.append(("314", 8130, 1, 1))
+    liste_feu_traffic.append(("314", 8069, 4, 1))
+    # feu eguillage l'hai les roses
+    liste_feu_traffic.append(("314", 8469, 1, 1))
+    liste_feu_traffic.append(("314", 8530, 4, 1))
+    liste_feu_traffic.append(("314", 8530, 1, 1))
+    liste_feu_traffic.append(("314", 8469, 4, 1))
+    # feu eguillage chevilly la rue
+    liste_feu_traffic.append(("314", 8869, 1, 1))
+    liste_feu_traffic.append(("314", 8930, 4, 1))
+    liste_feu_traffic.append(("314", 8930, 1, 1))
+    liste_feu_traffic.append(("314", 8869, 4, 1))
+    # feu eguillage thiais orly
+    liste_feu_traffic.append(("314", 9269, 1, 1))
+    liste_feu_traffic.append(("314", 9330, 4, 1))
+    liste_feu_traffic.append(("314", 9330, 1, 1))
+    liste_feu_traffic.append(("314", 9269, 4, 1))
+    # feu eguillage aéroport d'orly direction aéroport d'orly
+    liste_feu_traffic.append(("314", 9669, 4, 1))
+    liste_feu_traffic.append(("314", 9730, 4, 1))
+    # feu eguillage aéroport d'orly direction saint denis pleyel
+    liste_feu_traffic.append(("314", 9669, 1, 1))
+    liste_feu_traffic.append(("314", 9730, 1, 1))
+    # feu eguillage terminus aéroport d'orly
+    liste_feu_traffic.append(("314", 9830, 1, 1))
+    liste_feu_traffic.append(("314", 9760, 1, 1))
+    liste_feu_traffic.append(("314", 9830, 4, 1))
+    liste_feu_traffic.append(("314", 9760, 4, 1))
+    # feu depot
+    liste_feu_traffic.append(("314", 985, 5, 1))
+    liste_feu_traffic.append(("314", 985, 6, 1))
+    liste_feu_traffic.append(("314", 1100, 7, 1))
+    liste_feu_traffic.append(("314", 1100, 8, 1))
 
 

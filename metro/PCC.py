@@ -300,6 +300,7 @@ class Train:
         self.dir_metro = None
         self.draw_metro = None
         self.draw_metro_name = None
+        self.train_rectangle = None
         self.nom_metro = None
         self.line_id = None
         self.speed = speed
@@ -356,10 +357,24 @@ class Train:
             elif  (station.lineUp == self.y1 or station.lineBottom == self.y1) and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
                 self.arret = self.arret + 1
                 if self.arret > station.duree_stop and self.color != "#000000":
-                    self.arret = 0
-                    self.arret_station = 0
-                    self.speed = self.orig_speed
-                    station.FQ_OFF()
+
+                    if self.orig_speed > 0:
+                        if self.speed<= self.orig_speed:
+                            self.speed = self.speed+0.05
+                        if self.speed >= 0:
+                            station.FQ_OFF()
+                        if self.speed >= self.orig_speed:
+                            self.arret_station = 0
+                            self.arret = 0
+                    if self.orig_speed < 0:
+                        if self.speed>= self.orig_speed:
+                            self.speed = self.speed-0.05
+                        if self.speed <= 0:
+                            station.FQ_OFF()
+                        if self.speed <= self.orig_speed:
+                            self.arret_station = 0
+                            self.arret = 0
+
 
             #elif (station.x1 - abs(self.orig_speed / 2) <= self.x1 < station.x1 + abs(self.orig_speed / 2) and station.open == 0 and self.color != "#000000"):
             #    self.arret = 0
@@ -557,19 +572,12 @@ class Train:
                         self.orig_speed = self.speed
                         self.move()
 
+
         if self.line_id:
             self.canvas.coords(self.line_id, self.x1, self.y1, self.x2, self.y2)
-            self.canvas.delete(self.draw_metro_name)
-            self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2)/2, self.y1, text=self.name, fill="#000000",
-                                                           font=("Arial", 8))
             self.canvas.itemconfig(self.line_id, fill=self.color)
-
-
-
             self.canvas_metro.delete(self.draw_metro)
-            self.draw_metro = self.canvas_metro.create_line(500, (self.order +1) * 20 + 50, 550, (self.order +1) * 20 + 50, fill=self.color,
-                                          width=5)
-
+            self.draw_metro = self.canvas_metro.create_line(500, (self.order +1) * 20 + 50, 550, (self.order +1) * 20 + 50, fill=self.color, width=5)
 
             if self.speed > 0:
                 self.canvas_metro.delete(self.text_metro)
@@ -578,6 +586,19 @@ class Train:
                     [550, (self.order +1) * 20 + 50 + 5, 550,
                      (self.order +1) * 20 + 50 - 5, 550 + 5,
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
+                self.canvas.delete(self.draw_metro_name)
+                self.canvas.delete(self.train_rectangle)
+                if self.y_offset==50:
+                    self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 - 15, self.x2-16, self.y2 - 25, fill="#2EF000", outline="#0A8700")
+                    self.draw_metro_name = self.canvas.create_text((self.x1+self.x2)/2, self.y1 -20 , text=self.name, fill="#FFFFFE",
+                                                               font=("Arial", 8))
+
+
+                if self.y_offset==80:
+                    self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 + 15, self.x2-16, self.y2 + 25, fill="#2EF000", outline="#0A8700")
+                    self.draw_metro_name = self.canvas.create_text((self.x1+self.x2)/2, self.y1 +20, text=self.name, fill="#FFFFFE",
+                                                               font=("Arial", 8))
+
             if self.speed < 0:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
@@ -585,6 +606,23 @@ class Train:
                     [500, (self.order +1) * 20 + 50 + 5, 500,
                      (self.order +1) * 20 + 50 - 5, 500 - 5,
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
+                self.canvas.delete(self.draw_metro_name)
+                self.canvas.delete(self.train_rectangle)
+                if self.y_offset == 50:
+                    self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 - 15, self.x2-16, self.y2 - 25, fill="#2EF000", outline="#0A8700")
+                    self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2) / 2, self.y1 - 20,
+                                                                   text=self.name, fill="#FFFFFE",
+                                                                   font=("Arial", 8))
+
+
+                if self.y_offset == 80:
+                    self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 + 15, self.x2-16, self.y2 + 25, fill="#2EF000", outline="#0A8700")
+                    self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2) / 2+15, self.y1 + 20,
+                                                                   text=self.name, fill="#FFFFFE",
+                                                                   font=("Arial", 8))
+
+
+
             if (self.color == "#000000" and self.button_dir_droit == None) or (self.arret_collision==1 and self.button_dir_droit == None):
                 self.button_dir_droit = self.canvas.create_polygon([self.x2, self.y2  + 5, self.x2, self.y2 - 5, self.x2 + 5, self.y2], outline="", fill="#00FF00", width=0)
                 self.button_dir_gauche = self.canvas.create_polygon([self.x1, self.y1 + 5, self.x1, self.y1 - 5, self.x1 - 5, self.y1], outline="", fill="#00FF00",width=0)
@@ -616,9 +654,13 @@ class Train:
             self.canvas.delete(self.draw_metro_name)
             self.draw_metro_name = self.canvas.create_text(self.x1, self.y1, text=self.name,fill="#000000",font=("Arial", 8))
             self.canvas_metro.delete(self.nom_metro)
+            self.nom_metro = self.canvas_metro.create_text(450, (self.order + 1) * 20 + 50, text=self.name,
+                                                           fill="#000000",
+                                                           font=("Arial", 8))
 
-            self.nom_metro = self.canvas_metro.create_text(450, (self.order +1) * 20 + 50 , text=self.name, fill="#000000",
-                                                                       font=("Arial", 8))
+
+
+
 
 
 
@@ -1069,7 +1111,7 @@ frame_bouton = tk.Frame(canvas)
 frame_bouton.pack()
 
 # Créer le bouton dans le frame avec l'image et associer la fonction ouvrir_fenetre
-bouton_parametre = tk.Button(frame_bouton, image=photo_parametre, command=ouvrir_fenetre)
+bouton_parametre = tk.Button(frame_bouton, image=photo_parametre, bg="#B8B8B8",command=ouvrir_fenetre)
 bouton_parametre.image = photo_parametre  # Garder une référence à l'image
 bouton_parametre.pack()
 
