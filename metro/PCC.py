@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import time
+import random
 #from gtts import gTTS
 #import pygame
 #import os
@@ -19,8 +20,30 @@ liste_refresh=[]
 liste_refresh_depot_old=[]
 liste_refresh_depot=[]
 
+
 shape_ids=None
 text_id=None
+
+def Y_To_Offset(y):
+    return (y - 120) / 30
+
+def Offset_To_Y(offset, type="", position=""):
+    premiere_ligne = 120
+    ecart = 40
+    if type == "Train":
+        return premiere_ligne + (ecart * offset)
+    elif type=="Station" and position=="H":
+        return premiere_ligne + (ecart * offset) - 30
+    elif type=="Station" and position=="B":
+        return premiere_ligne + (ecart * offset) + 30
+    elif type=="Station" and position=="":
+        return premiere_ligne + (ecart * offset)
+    elif type=="Feu" and position=="H":
+        return premiere_ligne + (ecart * offset) - 10
+    elif type=="Feu" and position=="B":
+        return premiere_ligne + (ecart * offset) + 10
+    else:
+        return premiere_ligne + (ecart * offset)
 
 def Raise_Text(text):
     # test bulle
@@ -141,37 +164,7 @@ def update_time():
     # Actualiser toutes les 1000 millisecondes (1 seconde)
     root.after(1000, update_time)
 
-def refresh_eguillages():
-    global liste_refresh_old
-    global liste_refresh
 
-    if len(liste_refresh) > 0:
-        liste_refresh_old = liste_refresh
-
-    liste_refresh = []
-    for element in liste_eguillages:
-
-        if element[4] == 0:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill="#EBEBEB", width=2)
-            liste_refresh.append(identity)
-
-
-        if element[4] == 1:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill="#00FF00", width=2)
-            liste_refresh.append(identity)
-
-            identity = canvas.create_polygon([(element[0]+element[2])/2,(element[1]+element[3])/2+5,(element[0]+element[2])/2,(element[1]+element[3])/2-5,(element[0]+element[2])/2+10,(element[1]+element[3])/2], outline="", fill="#000000", width=0)
-            liste_refresh.append(identity)
-
-        if element[4] == 2:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill="#00FF00", width=2)
-            liste_refresh.append(identity)
-
-            identity = canvas.create_polygon([(element[0] + element[2]) / 2, (element[1] + element[3]) / 2 + 5, (element[0] + element[2]) / 2,(element[1] + element[3]) / 2 - 5, (element[0] + element[2]) / 2 - 10, (element[1] + element[3]) / 2],outline="", fill="#000000", width=2)
-            liste_refresh.append(identity)
-
-        for element in liste_refresh_old:
-            canvas.delete(element)
 
 def refresh_eguillages_depot():
     global liste_refresh_depot_old
@@ -184,21 +177,21 @@ def refresh_eguillages_depot():
     for element in liste_depot_eguillage:
 
         if element[4] == 0:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill=element[6], width=2)
+            identity = canvas.create_line(element[0], Offset_To_Y(element[1]), element[2], Offset_To_Y(element[3]), fill=element[6], width=2)
             liste_refresh_depot.append(identity)
 
         if element[4] == 1:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill="#00FF00", width=2)
+            identity = canvas.create_line(element[0], Offset_To_Y(element[1]), element[2], Offset_To_Y(element[3]), fill="#00FF00", width=2)
             liste_refresh_depot.append(identity)
 
-            identity = canvas.create_polygon([(element[0]+element[2])/2,(element[1]+element[3])/2+5,(element[0]+element[2])/2,(element[1]+element[3])/2-5,(element[0]+element[2])/2+10,(element[1]+element[3])/2], outline="", fill="#000000", width=0)
+            identity = canvas.create_polygon([(element[0]+element[2])/2,(Offset_To_Y(element[1])+Offset_To_Y(element[3]))/2+5,(element[0]+element[2])/2,(Offset_To_Y(element[1])+Offset_To_Y(element[3]))/2-5,(element[0]+element[2])/2+10,(Offset_To_Y(element[1])+Offset_To_Y(element[3]))/2], outline="", fill="#000000", width=0)
             liste_refresh_depot.append(identity)
 
         if element[4] == 2:
-            identity = canvas.create_line(element[0], element[1], element[2], element[3], fill="#00FF00", width=2)
+            identity = canvas.create_line(element[0], Offset_To_Y(element[1]), element[2], Offset_To_Y(element[3]), fill="#00FF00", width=2)
             liste_refresh_depot.append(identity)
 
-            identity = canvas.create_polygon([(element[0] + element[2]) / 2, (element[1] + element[3]) / 2 + 5, (element[0] + element[2]) / 2,(element[1] + element[3]) / 2 - 5, (element[0] + element[2]) / 2 - 10, (element[1] + element[3]) / 2],outline="", fill="#000000", width=2)
+            identity = canvas.create_polygon([(element[0] + element[2]) / 2, (Offset_To_Y(element[1]) + Offset_To_Y(element[3])) / 2 + 5, (element[0] + element[2]) / 2,(Offset_To_Y(element[1]) + Offset_To_Y(element[3])) / 2 - 5, (element[0] + element[2]) / 2 - 10, (Offset_To_Y(element[1]) + Offset_To_Y(element[3])) / 2],outline="", fill="#000000", width=2)
             liste_refresh_depot.append(identity)
 
         for element in liste_refresh_depot_old:
@@ -263,38 +256,103 @@ def clic_sur_canevas(event):
             train.can_metro_button_dir_gauche = None
             train.move()
 
-    for element in liste_eguillages:
-        if (element[0]+element[2])/2 - 10 <= x <= (element[0]+element[2])/2 + 10:
-            if (element[1]+element[3])/2 - 10 <= y <= (element[1]+element[3])/2 +10:
-                if element[4] == 0:
-                    liste_eguillages.append((element[0], element[1], element[2], element[3], 1, element[5]))
-                if element[4] == 1:
-                    liste_eguillages.append((element[0], element[1], element[2], element[3], 2, element[5]))
-                if element[4] == 2:
-                    liste_eguillages.append((element[0], element[1], element[2], element[3], 0, element[5]))
-                liste_eguillages.remove(element)
-                refresh_eguillages()
+    for eguillage in metro_control.eguillages:
+        if (eguillage.x_entree+eguillage.x_sortie)/2 - 10 <= x <= (eguillage.x_entree+eguillage.x_sortie)/2 + 10:
+            if (Offset_To_Y(eguillage.offset_entree)+Offset_To_Y(eguillage.offset_sortie))/2 - 10 <= y <= (Offset_To_Y(eguillage.offset_entree)+Offset_To_Y(eguillage.offset_sortie))/2 +10:
+                if eguillage.dir == 0:
+                    eguillage.dir = 1
+                elif eguillage.dir == 1:
+                    eguillage.dir = 2
+                elif eguillage.dir == 2:
+                    eguillage.dir = 0
+                eguillage.refresh()
 
-    for element in liste_depot_eguillage:
-        if (element[0]+element[2])/2 - 10 <= x <= (element[0]+element[2])/2 + 10:
-            if (element[1]+element[3])/2 - 10 <= y <= (element[1]+element[3])/2 +10:
-                if element[4] == 0:
-                    liste_depot_eguillage.append((element[0], element[1], element[2], element[3], 1, element[5], element[6]))
-                if element[4] == 1:
-                    liste_depot_eguillage.append((element[0], element[1], element[2], element[3], 2, element[5], element[6]))
-                if element[4] == 2:
-                    liste_depot_eguillage.append((element[0], element[1], element[2], element[3], 0, element[5], element[6]))
-                liste_depot_eguillage.remove(element)
-                refresh_eguillages_depot()
+
+class Eguillage:
+    def __init__(self, canvas, canvas_metro, type, x_entree, offset_entree, x_sortie, offset_sortie, dir, name, color):
+        self.canvas = canvas
+        self.canvas_metro = canvas_metro
+        self.type = type
+        self.x_entree = x_entree
+        self.offset_entree = offset_entree
+        self.x_sortie = x_sortie
+        self.offset_sortie = offset_sortie
+        self.dir = dir
+        self.name = name
+        self.draw_droit_sortie = None
+        self.draw_droit_entree = None
+        self.color = color
+        self.draw = None
+        self.draw_polygon = None
+        if self.dir != 0:
+            if self.x_entree < self.x_sortie:
+                self.dir = 1
+            else:
+                self.dir = 2
+
+
+
+    def refresh(self):
+        if self.draw:
+            self.canvas.delete(self.draw)
+        if self.draw_polygon:
+            self.canvas.delete(self.draw_polygon)
+        if self.draw_droit_entree:
+            self.canvas.delete(self.draw_droit_entree)
+        if self.draw_droit_sortie:
+            self.canvas.delete(self.draw_droit_sortie)
+        if self.dir == 0:
+            self.draw = self.canvas.create_line(self.x_entree,Offset_To_Y(self.offset_entree),self.x_sortie,Offset_To_Y(self.offset_sortie), fill=self.color,width=2)
+            self.draw_droit_entree =  self.canvas.create_line(self.x_entree -10, Offset_To_Y(self.offset_entree), self.x_sortie +10, Offset_To_Y(self.offset_entree), fill="#00FF00", width=4)
+            self.draw_droit_sortie = self.canvas.create_line(self.x_sortie +10, Offset_To_Y(self.offset_sortie), self.x_entree -10, Offset_To_Y(self.offset_sortie),fill="#00FF00", width=4)
+        if self.dir == 1:
+            if self.x_entree > self.x_sortie:
+                tmp = self.x_entree
+                self.x_entree = self.x_sortie
+                self.x_sortie = tmp
+                tmp = self.offset_entree
+                self.offset_entree = self.offset_sortie
+                self.offset_sortie = tmp
+            self.draw = self.canvas.create_line(self.x_entree, Offset_To_Y(self.offset_entree), self.x_sortie, Offset_To_Y(self.offset_sortie), fill="#00FF00", width=2)
+            self.draw_polygon = self.canvas.create_polygon([(self.x_entree + self.x_sortie) / 2, (
+                            Offset_To_Y(self.offset_entree) + Offset_To_Y(self.offset_sortie)) / 2 + 5,
+                                                  (self.x_entree + self.x_sortie) / 2, (
+                                                              Offset_To_Y(self.offset_entree) + Offset_To_Y(
+                                                          self.offset_sortie)) / 2 - 5,
+                                                  (self.x_entree + self.x_sortie) / 2 + 10, (
+                                                              Offset_To_Y(self.offset_entree) + Offset_To_Y(
+                                                          self.offset_sortie)) / 2], outline="", fill="#000000",
+                                                 width=0)
+        if self.dir == 2:
+            if self.x_entree < self.x_sortie:
+                tmp = self.x_entree
+                self.x_entree = self.x_sortie
+                self.x_sortie = tmp
+                tmp = self.offset_entree
+                self.offset_entree = self.offset_sortie
+                self.offset_sortie = tmp
+            self.draw = self.canvas.create_line(self.x_entree, Offset_To_Y(self.offset_entree), self.x_sortie, Offset_To_Y(self.offset_sortie),
+                                                fill="#00FF00", width=2)
+            self.draw_polygon = self.canvas.create_polygon([(self.x_entree + self.x_sortie) / 2, (
+                    Offset_To_Y(self.offset_entree) + Offset_To_Y(self.offset_sortie)) / 2 + 5,
+                                                            (self.x_entree + self.x_sortie) / 2, (
+                                                                    Offset_To_Y(self.offset_entree) + Offset_To_Y(
+                                                                self.offset_sortie)) / 2 - 5,
+                                                            (self.x_entree + self.x_sortie) / 2 - 10, (
+                                                                    Offset_To_Y(self.offset_entree) + Offset_To_Y(
+                                                                self.offset_sortie)) / 2], outline="", fill="#000000",
+                                                           width=0)
+
 
 class Train:
-    def __init__(self, canvas, canvas_metro, name, position, speed, y_offset, on_off, color, order):
+    def __init__(self, canvas, canvas_metro, name, position, speed, offset, on_off, color, order):
         self.bouton_parametre =None
         self.canvas = canvas
         self.last_station = None
         self.canvas_metro = canvas_metro
         self.color = color
         self.order = order
+        self.offset = offset
         self.on_off = on_off
         self.text_metro = None
         self.dir_metro = None
@@ -304,11 +362,11 @@ class Train:
         self.nom_metro = None
         self.line_id = None
         self.speed = speed
-        self.y_offset = y_offset
+        self.y_offset = Offset_To_Y(offset,"Train")
         self.x1 = position
         self.x2 = position + 50
-        self.y1 = 50 + y_offset
-        self.y2 = 50 + y_offset
+        self.y1 = Offset_To_Y(offset,"Train")
+        self.y2 = Offset_To_Y(offset,"Train")
         self.arret = 0
         self.arret_station = 0
         self.arret_collision = 0
@@ -320,9 +378,97 @@ class Train:
         self.can_metro_button_dir_gauche = None
         self.sound=0
         self.button = None
+        self.eguillage = None
     def move(self):
-        self.x1 += self.speed
-        self.x2 += self.speed
+        if self.eguillage:
+            #gauche droite, bas haut
+            if self.eguillage.x_entree < self.eguillage.x_sortie and self.eguillage.offset_entree > self.eguillage.offset_sortie:
+                if self.x1 < self.eguillage.x_entree:
+                    self.x1 += self.speed
+                if self.y2 > Offset_To_Y(self.eguillage.offset_sortie):
+                    self.x2 += self.speed
+                    self.y2 -= self.speed
+                else:
+                    if self.y1 > Offset_To_Y(self.eguillage.offset_sortie):
+                        self.x1 += self.speed
+                        self.y1 -= self.speed
+                        self.x2 += self.speed
+                if self.y1 <= Offset_To_Y(self.eguillage.offset_sortie) and self.y2 <= Offset_To_Y(self.eguillage.offset_sortie):
+                    self.offset = self.eguillage.offset_sortie
+                    self.y_offset = Offset_To_Y(self.eguillage.offset_sortie)
+                    self.y1 = self.y_offset
+                    self.y2 = self.y_offset
+                    self.x1 = self.eguillage.x_sortie
+                    self.x2 = self.x1 + 50
+                    self.eguillage = None
+            # gauche droite,  haut bas
+            elif self.eguillage.x_entree < self.eguillage.x_sortie and self.eguillage.offset_entree < self.eguillage.offset_sortie:
+                if self.x1 < self.eguillage.x_entree:
+                    self.x1 += self.speed
+                if self.y2 < Offset_To_Y(self.eguillage.offset_sortie):
+                    self.x2 += self.speed
+                    self.y2 += self.speed
+                else:
+                    if self.y1 < Offset_To_Y(self.eguillage.offset_sortie):
+                        self.x1 += self.speed
+                        self.y1 += self.speed
+                        self.x2 += self.speed
+                if self.y1 >= Offset_To_Y(self.eguillage.offset_sortie) and self.y2 >= Offset_To_Y(self.eguillage.offset_sortie):
+                    self.offset = self.eguillage.offset_sortie
+                    self.y_offset = Offset_To_Y(self.eguillage.offset_sortie)
+                    self.y1 = self.y_offset
+                    self.y2 = self.y_offset
+                    self.x1 = self.eguillage.x_sortie
+                    self.x2 = self.x1 + 50
+                    self.eguillage = None
+
+            #droite gauche base haut
+            elif self.eguillage.x_entree > self.eguillage.x_sortie and self.eguillage.offset_entree > self.eguillage.offset_sortie:
+                if self.x2 > self.eguillage.x_entree:
+                    self.x2 += self.speed
+                if self.y1 > Offset_To_Y(self.eguillage.offset_sortie):
+                    self.x1 += self.speed
+                    self.y1 += self.speed
+                else:
+                    if self.y2 > Offset_To_Y(self.eguillage.offset_sortie):
+                        self.x1 += self.speed
+                        self.y2 += self.speed
+                        self.x2 += self.speed
+                if self.y1 <= Offset_To_Y(self.eguillage.offset_sortie) and self.y2 <= Offset_To_Y(self.eguillage.offset_sortie):
+                    self.offset = self.eguillage.offset_sortie
+                    self.y_offset = Offset_To_Y(self.eguillage.offset_sortie)
+                    self.y1 = self.y_offset
+                    self.y2 = self.y_offset
+                    self.x2 = self.eguillage.x_sortie
+                    self.x1 = self.x2 - 50
+                    self.eguillage = None
+
+
+            #droite gauche haut bas
+            elif self.eguillage.x_entree > self.eguillage.x_sortie and self.eguillage.offset_entree < self.eguillage.offset_sortie:
+                if self.x2 > self.eguillage.x_entree:
+                    self.x2 += self.speed
+                if self.y1 < Offset_To_Y(self.eguillage.offset_sortie):
+                    self.x1 += self.speed
+                    self.y1 -= self.speed
+                else:
+                    if self.y2 < Offset_To_Y(self.eguillage.offset_sortie):
+                        self.x1 += self.speed
+                        self.y2 -= self.speed
+                        self.x2 += self.speed
+                if self.y1 >= Offset_To_Y(self.eguillage.offset_sortie) and self.y2 >= Offset_To_Y(self.eguillage.offset_sortie):
+                    self.offset = self.eguillage.offset_sortie
+                    self.y_offset = Offset_To_Y(self.eguillage.offset_sortie)
+                    self.y1 = self.y_offset
+                    self.y2 = self.y_offset
+                    self.x2 = self.eguillage.x_sortie
+                    self.x1 = self.x2 - 50
+                    self.eguillage = None
+
+
+        else:
+            self.x1 += self.speed
+            self.x2 += self.speed
 
         if self.on_off == 0:
             self.color = "#000000"
@@ -331,8 +477,10 @@ class Train:
 
         # gestion de l'arrivé du train en station
         for station in metro_control.stations:
+
+
             #Arrivée en station d'un train circulant de la gauche vers la droite
-            if (station.lineUp == self.y1 or station.lineBottom == self.y1) and self.arret_station == 0 and self.speed > 0 and (station.x1 + station.x2)/2 - self.speed/2 <= (self.x1 + self.x2)/2 <= (station.x1 + station.x2)/2 + self.speed/2  and station.open == 1 and self.last_station != station.name+str(station.lineUp):
+            if station.Offset == self.offset and self.arret_station == 0 and self.speed > 0 and (station.x1 + station.x2)/2 - self.speed/2 <= (self.x1 + self.x2)/2 <= (station.x1 + station.x2)/2 + self.speed/2  and station.open == 1:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
@@ -343,7 +491,7 @@ class Train:
 
             # Arrivée en station d'un train circulant de la droite vers la gauche
 
-            elif (station.lineUp == self.y1 or station.lineBottom == self.y1) and  self.arret_station == 0 and self.speed < 0 and (station.x1 + station.x2)/2 - self.speed/2 >= (self.x1 + self.x2)/2 >= (station.x1 + station.x2)/2 + self.speed/2 and station.open == 1 and self.last_station != station.name+str(station.lineUp):
+            elif station.Offset == self.offset and self.arret_station == 0 and self.speed < 0 and (station.x1 + station.x2)/2 - self.speed/2 >= (self.x1 + self.x2)/2 >= (station.x1 + station.x2)/2 + self.speed/2 and station.open == 1:
                 self.last_station = station.name+str(station.lineUp)
                 print(self.name + " " + station.name)
                 self.canvas_metro.delete(self.text_metro)
@@ -354,7 +502,7 @@ class Train:
 
 
             #compteur de temps d'arrêt
-            elif  (station.lineUp == self.y1 or station.lineBottom == self.y1) and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
+            elif  station.Offset == self.offset and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
                 self.arret = self.arret + 1
                 if self.arret > station.duree_stop and self.color != "#000000":
 
@@ -376,31 +524,18 @@ class Train:
                             self.arret = 0
 
 
-            #elif (station.x1 - abs(self.orig_speed / 2) <= self.x1 < station.x1 + abs(self.orig_speed / 2) and station.open == 0 and self.color != "#000000"):
-            #    self.arret = 0
-            #    station.FQ_OFF()
-            #    self.speed = self.orig_speed
-            #    self.canvas.delete(self.button_dir_droit)
-            #    self.canvas_metro.delete(self.can_metro_button_dir_droit)
-            #    self.canvas.delete(self.button_dir_gauche)
-            #    self.canvas_metro.delete(self.can_metro_button_dir_gauche)
-            #    self.can_metro_button_dir_droit = None
-            #    self.button_dir_droit = None
-            #    self.button_dir_gauche = None
-            #    self.can_metro_button_dir_gauche = None
-
         #gestion des feux
         for feu in metro_control.feux:
-            if self.speed < 0 and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.x1 < feu.X < self.x2 :
+            if self.speed < 0 and self.offset == feu.offset and self.x1 < feu.X < self.x2 :
                 feu.Stop(self.nom_metro)
-            elif self.speed > 0 and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.x1 < feu.X < self.x2:
+            elif self.speed > 0 and self.offset == feu.offset and self.x1 < feu.X < self.x2:
                 feu.Stop(self.nom_metro)
-            elif self.nom_metro == feu.TrainID and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.speed > 0 and self.x1 > feu.X + 120:
+            elif self.nom_metro == feu.TrainID and self.offset == feu.offset and self.speed > 0 and self.x1 > feu.X + 120:
                 #not (( self.x1 < feu.X < self.x2) or ( self.x1 > feu.X > self.x2) ):
                 feu.Start()
-            elif self.nom_metro == feu.TrainID and self.y1 - 8 <= feu.Y <= self.y1 + 8 and self.speed < 0 and self.x2 < feu.X - 120:
+            elif self.nom_metro == feu.TrainID and self.offset == feu.offset and self.speed < 0 and self.x2 < feu.X - 120:
                 feu.Start()
-            elif self.nom_metro == feu.TrainID and not (self.y1 - 8 <= feu.Y <= self.y1 + 8):
+            elif self.nom_metro == feu.TrainID and self.offset != feu.offset:
                 feu.Start()
             #print(abs(self.x1 - feu.X))
 
@@ -446,29 +581,29 @@ class Train:
                 print(self.name + " arrive a " + element[5])
                 while element[3] != self.y1 :
                     if element[1] > element[3]:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 += 1
-                        self.x2 += 1
+                        self.y1 -= self.speed
+                        self.y2 -= self.speed
+                        self.x1 += self.speed
+                        self.x2 += self.speed
                     else:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 += 1
-                        self.x2 += 1
+                        self.y1 += self.speed
+                        self.y2 += self.speed
+                        self.x1 += self.speed
+                        self.x2 += self.speed
 
             if (element[0] - abs(self.speed / 2) <= self.x1 < element[0] + abs(self.speed / 2) and element[1] == self.y1 ) and element[4]==1 and self.speed < 0 and element[0] > element[2]:
                 print(self.name + " arrive a " + element[5])
                 while element[3] != self.y1 :
                     if element[1] > element[3]:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 -= 1
-                        self.x2 -= 1
+                        self.y1 -= self.speed*0.1
+                        self.y2 -= self.speed*0.1
+                        self.x1 -= self.speed*0.1
+                        self.x2 -= self.speed*0.1
                     else:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 -= 1
-                        self.x2 -= 1
+                        self.y1 += self.speed*0.1
+                        self.y2 += self.speed*0.1
+                        self.x1 -= self.speed*0.1
+                        self.x2 -= self.speed*0.1
 
             if (element[0] - abs(self.speed / 2) <= self.x1 < element[0] + abs(self.speed / 2) and element[1] == self.y1) and element[4] == 2 and self.speed > 0 and element[2] < element[0]:
                 print(self.name + " arrive a " + element[5])
@@ -499,63 +634,18 @@ class Train:
                         self.x2 -= 1
 
 
-        for element in liste_eguillages:
+        for eguillage in metro_control.eguillages:
+            # si l'eguillage est du le même rail que le train et qu'il est actif
+            if  eguillage.offset_entree == self.offset and eguillage.dir != 0:
+                # si le train va de gauche a droite, que l'eguillage va de gauche a droite et le train atteint l'équillage
+                if eguillage.x_entree < eguillage.x_sortie and self.speed > 0 and (eguillage.x_entree - abs(self.orig_speed / 2) <= self.x2 < eguillage.x_entree + abs(self.orig_speed / 2)):
+                    print(self.name + " arrive a " + eguillage.name)
+                    self.eguillage=eguillage
 
-            if (element[0] - abs(self.orig_speed / 2) <= self.x1 < element[0] + abs(self.orig_speed / 2) and element[1] == self.y1 ) and element[4]==1 and self.speed > 0 and element[0] < element[2]:
-                print(self.name + " arrive a " + element[5])
-                while element[3] != self.y1 :
-                    if element[1] > element[3]:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 += 1
-                        self.x2 += 1
-                    else:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 += 1
-                        self.x2 += 1
-
-            if (element[0] - abs(self.orig_speed / 2) <= self.x1 < element[0] + abs(self.orig_speed / 2) and element[1] == self.y1 ) and element[4]==1 and self.speed < 0 and element[0] > element[2]:
-                print(self.name + " arrive a " + element[5])
-                while element[3] != self.y1 :
-                    if element[1] > element[3]:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 -= 1
-                        self.x2 -= 1
-                    else:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 -= 1
-                        self.x2 -= 1
-
-            if (element[0] - abs(self.orig_speed / 2) <= self.x1 < element[0] + abs(self.orig_speed / 2) and element[1] == self.y1) and element[4] == 2 and self.speed > 0 and element[2] < element[0]:
-                print(self.name + " arrive a " + element[5])
-                while element[3] != self.y1:
-                    if element[1] > element[3]:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 += 1
-                        self.x2 += 1
-                    else:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 += 1
-                        self.x2 += 1
-
-            if (element[2] - abs(self.orig_speed / 2) <= self.x1 < element[2] + abs(self.orig_speed / 2) and element[3] == self.y1) and element[4] == 2 and self.speed < 0 and element[2] > element[0]:
-                print(self.name + " arrive en mode 2 a " + element[5])
-                while element[1] != self.y1:
-                    if element[1] > element[3]:
-                        self.y1 += 1
-                        self.y2 += 1
-                        self.x1 -= 1
-                        self.x2 -= 1
-                    else:
-                        self.y1 -= 1
-                        self.y2 -= 1
-                        self.x1 -= 1
-                        self.x2 -= 1
+                # si le train va de  droite a gauche, que l'eguillage va de droite a gauche et le train atteint l'équillage
+                if eguillage.x_entree > eguillage.x_sortie and self.speed < 0 and (eguillage.x_entree - abs(self.orig_speed / 2) <= self.x1 < eguillage.x_entree + abs(self.orig_speed / 2)):
+                    print(self.name + " arrive a " + eguillage.name)
+                    self.eguillage = eguillage
 
 
         for terminus in metro_control.terminus:
@@ -592,13 +682,14 @@ class Train:
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
                 self.canvas.delete(self.draw_metro_name)
                 self.canvas.delete(self.train_rectangle)
-                if self.y_offset==50:
+
+                if self.offset==1:
                     self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 - 15, self.x2-16, self.y2 - 25, fill="#2EF000", outline="#0A8700")
                     self.draw_metro_name = self.canvas.create_text((self.x1+self.x2)/2, self.y1 -20 , text=self.name, fill="#FFFFFE",
                                                                font=("Arial", 8))
 
 
-                if self.y_offset==80:
+                if self.offset==2:
                     self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 + 15, self.x2-16, self.y2 + 25, fill="#2EF000", outline="#0A8700")
                     self.draw_metro_name = self.canvas.create_text((self.x1+self.x2)/2, self.y1 +20, text=self.name, fill="#FFFFFE",
                                                                font=("Arial", 8))
@@ -610,22 +701,21 @@ class Train:
                     [500, (self.order +1) * 20 + 50 + 5, 500,
                      (self.order +1) * 20 + 50 - 5, 500 - 5,
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
+
                 self.canvas.delete(self.draw_metro_name)
                 self.canvas.delete(self.train_rectangle)
-                if self.y_offset == 50:
+
+                if self.offset == 1:
                     self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 - 15, self.x2-16, self.y2 - 25, fill="#2EF000", outline="#0A8700")
                     self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2) / 2, self.y1 - 20,
                                                                    text=self.name, fill="#FFFFFE",
                                                                    font=("Arial", 8))
 
-
-                if self.y_offset == 80:
+                if self.offset == 2:
                     self.train_rectangle = self.canvas.create_rectangle((self.x1+self.x2)/2-9, self.y1 + 15, self.x2-16, self.y2 + 25, fill="#2EF000", outline="#0A8700")
                     self.draw_metro_name = self.canvas.create_text((self.x1 + self.x2) / 2+15, self.y1 + 20,
                                                                    text=self.name, fill="#FFFFFE",
                                                                    font=("Arial", 8))
-
-
 
             if (self.color == "#000000" and self.button_dir_droit == None) or (self.arret_collision==1 and self.button_dir_droit == None):
                 self.button_dir_droit = self.canvas.create_polygon([self.x2, self.y2  + 5, self.x2, self.y2 - 5, self.x2 + 5, self.y2], outline="", fill="#00FF00", width=0)
@@ -633,26 +723,7 @@ class Train:
                 self.can_metro_button_dir_droit = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] + 5, canvas_metro.coords(self.draw_metro)[2], canvas_metro.coords(self.draw_metro)[3] - 5, canvas_metro.coords(self.draw_metro)[2] + 5, canvas_metro.coords(self.draw_metro)[3]], outline="", fill="#00FF00",width=0)
                 self.can_metro_button_dir_gauche = self.canvas_metro.create_polygon([canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] + 5, canvas_metro.coords(self.draw_metro)[0], canvas_metro.coords(self.draw_metro)[1] - 5, canvas_metro.coords(self.draw_metro)[0] - 5, canvas_metro.coords(self.draw_metro)[1]], outline="", fill="#00FF00", width=0)
 
-                #canvas_metro.create_rectangle(60, 60, 160, 80, fill="#000000", width=2)
-                #canvas_metro.create_rectangle(10, 10, 1150, 50, fill="#000000", width=2)
 
-                #self.copy= (self.Name)
-                #image = Image.open("parametre.png")
-                #image = image.resize((20, 00))
-                #photo_parametre = ImageTk.PhotoImage(image)
-
-
-
-                # Créer un Frame pour contenir le bouton
-                #frame_bouton = tk.Frame(canvas)
-                #frame_bouton.pack()
-
-                # Créer le bouton dans le frame avec l'image et associer la fonction ouvrir_fenetre
-                #self.button_parametre = tk.Button(frame_bouton, image=photo_parametre, command=ouvrir_fenetre)
-                #self.button_parametre.image = photo_parametre  # Garder une référence à l'image
-                #self.button_parametre.pack()
-
-                #canvas.create_window(20, (self.order +1) * 20 + 50, anchor=tk.CENTER, window=frame_bouton)
         else:
             self.line_id = self.canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill=self.color, width=5)
             self.canvas.delete(self.draw_metro_name)
@@ -667,39 +738,52 @@ class Train:
 
 
 class Station:
-    def __init__(self, canvas, X, Name, Offset, DureeStop, Open):
+    def __init__(self, canvas, X, Name, Offset, Position, DureeStop, Open, index):
         self.canvas = canvas
         self.x1 = X
         self.name = Name
         self.Offset = Offset
-        self.lineUp = (Offset)*(30) + 10
-        self.lineBottom = (Offset)*(30) + 40
+        self.lineUp = (Offset)*(30) + 20
+        self.lineBottom = (Offset)*(30) + 50
         self.open = 1
         self.quai_on = 1
         self.duree_stop = DureeStop
-        self.y1 = Offset * 30 + 10
+        self.position = Position
         self.x2 = X + 50
-        self.y2 = Offset * 30 + 40
+        self.index = index
+        if Position== "H":
+            self.y1 = Offset_To_Y(Offset, "Station", Position) - 30
+            self.y2 = Offset_To_Y(Offset,"Station",Position)
+        elif Position == "B":
+            self.y1 = Offset_To_Y(Offset, "Station", Position)
+            self.y2 = Offset_To_Y(Offset, "Station", Position) + 30
+        else:
+            self.y1 = Offset_To_Y(Offset, "Station", Position) - 15
+            self.y2 = Offset_To_Y(Offset, "Station", Position) + 15
         self.color = "#7A7A7A"
         self.text_id = canvas.create_text(self.x1 + 32, 30, text=self.name, fill="#000000", font = ("Arial", 8), anchor = "center")
-        if Offset == 2:
-            self.rec_id = canvas.create_rectangle(self.x1, self.y1-25, self.x2, self.y2-25, fill= self.color, outline = "")
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2-16, anchor=tk.CENTER,image=photo_fq_off)
-        if Offset == 3:
-            self.rec_id = canvas.create_rectangle(self.x1, self.y1, self.x2, self.y2, fill= self.color, outline = "")
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_off)
-        if Offset == 4:
-            self.rec_id = canvas.create_rectangle(self.x1, self.y1+25, self.x2, self.y2+25, fill= self.color, outline = "")
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2+16, anchor=tk.CENTER,image=photo_fq_off)
-
+        self.rec_id = canvas.create_rectangle(self.x1, self.y1 , self.x2, self.y2 , fill=self.color, outline="")
+        if Position == "H":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(Offset,"Station",Position)-5, anchor=tk.CENTER,                                 image=photo_fq_off)
+        elif Position == "B":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(Offset, "Station", Position)+5,anchor=tk.CENTER, image=photo_fq_off)
+        else:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(Offset, "Station", Position) ,
+                                             anchor=tk.CENTER, image=photo_fq_off)
         self.bouton = tk.Button(canvas_metro, command=lambda: toggle_station_button(self), font=("Arial", 7), text=self.name,bg="#12F04F", fg="#000000", wraplength=100, width=20, height=3)
         self.bouton.pack()
-        self.bouton_window = canvas_metro.create_window(100 * self.Offset -160, 33 * (index - (self.Offset / 2))  + 110, anchor=tk.W, window=self.bouton)
-
-        # station.canvas.delete(station.rec_id)
-        # station.canvas.delete(station.text_id)
-        # station.text_id =
-        # station.rec_id =
+        if Position == "H":
+            self.bouton_window = canvas_metro.create_window(20,
+                                                            50 * (self.index//2) + 100, anchor=tk.W,
+                                                            window=self.bouton)
+        elif Position == "B":
+            self.bouton_window = canvas_metro.create_window(260,
+                                                            50 * (self.index//2) + 100, anchor=tk.W,
+                                                            window=self.bouton)
+        else:
+            self.bouton_window = canvas_metro.create_window(140,
+                                                            50 * (self.index//2) + 100, anchor=tk.W,
+                                                            window=self.bouton)
 
     def Start(self):
         self.open = 1
@@ -731,46 +815,34 @@ class Station:
     def FQ_ON(self):
         self.quai_on = 1
         canvas.delete(self.image)
-        if self.Offset == 2:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2-16, anchor=tk.CENTER, image=photo_fq_on)
-        if self.Offset == 3:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_on)
-        if self.Offset == 4:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2+16 , anchor=tk.CENTER, image=photo_fq_on)
+        if self.position == "H":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(self.Offset,"Station",self.position)-5, anchor=tk.CENTER, image=photo_fq_on)
+        elif self.position == "B":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(self.Offset, "Station", self.position)+5,anchor=tk.CENTER, image=photo_fq_on)
+        else:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, Offset_To_Y(self.Offset, "Station", self.position) , anchor=tk.CENTER, image=photo_fq_on)
 
     def FQ_OFF(self):
         self.quai_on = 0
         canvas.delete(self.image)
-        if self.Offset == 2:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2 - 16, anchor=tk.CENTER,
+        if self.position == "H":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2,
+                                             Offset_To_Y(self.Offset, "Station", self.position) - 5, anchor=tk.CENTER,
                                              image=photo_fq_off)
-        if self.Offset == 3:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,
+        elif self.position == "B":
+            self.image = canvas.create_image((self.x1 + self.x2) / 2,
+                                             Offset_To_Y(self.Offset, "Station", self.position) + 5, anchor=tk.CENTER,
                                              image=photo_fq_off)
-        if self.Offset == 4:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2 + 16, anchor=tk.CENTER,
+        else:
+            self.image = canvas.create_image((self.x1 + self.x2) / 2,
+                                             Offset_To_Y(self.Offset, "Station", self.position), anchor=tk.CENTER,
                                              image=photo_fq_off)
 class Feu:
-    def __init__(self, canvas, name_feu, X, Offset, Etat):
+    def __init__(self, canvas, name_feu, X, Offset, Position, Etat):
         self.canvas = canvas
+        self.offset = Offset
         self.X = X
-        if Offset == 1:
-            self.Y = 100 - 8
-        if Offset == 2:
-            self.Y = 110 - 4
-        if Offset == 3:
-            self.Y = 120 + 2
-        if Offset == 4:
-            self.Y = 130 + 8
-        if Offset == 5:
-            self.Y = 190 + 8
-        if Offset == 6:
-            self.Y = 220 + 8
-        if Offset == 7:
-            self.Y = 250 + 8
-        if Offset == 8:
-            self.Y = 280 + 8
-
+        self.Y = Offset_To_Y(Offset, "Feu", Position)
         self.Etat = Etat
         self.TrainID = None
         self.nom_feu = None
@@ -802,7 +874,7 @@ class Terminus:
     def __init__(self, canvas, X, Y, Name, Etat, index):
         self.canvas = canvas
         self.X = X
-        self.Y = Y
+        self.Y = Offset_To_Y(Y)
         self.Name = Name
         self.Etat = Etat
         self.bouton = None
@@ -847,6 +919,7 @@ class MetroControl:
         self.canvas_metro = canvas_metro
         self.trains = []
         self.stations = []
+        self.eguillages = []
         self.feux = []
         self.terminus = []
 
@@ -855,6 +928,9 @@ class MetroControl:
 
     def add_station(self, station):
         self.stations.append(station)
+
+    def add_eguillage(self, eguillage):
+        self.eguillages.append(eguillage)
 
     def add_feu(self, feu):
         self.feux.append(feu)
@@ -1023,10 +1099,12 @@ if Ligne == "0":
 
 #Materialisation des lignes
 for element in liste_lignes:
-    canvas.create_line(element[0],element[1],element[2],element[3], fill=element[4],width=element[5])
+    #offset, x debut, x_fin, couleur, largeur
+    canvas.create_line(element[1],Offset_To_Y(element[0]),element[2],Offset_To_Y(element[0]), fill=element[3],width=element[4])
 
 for element in liste_depot_ligne:
-    canvas.create_line(element[0],element[1],element[2],element[3], fill=element[4],width=element[5])
+    # offset, x debut, x_fin, couleur, largeur
+    canvas.create_line(element[1],Offset_To_Y(element[0]),element[2],Offset_To_Y(element[0]), fill=element[3],width=element[4])
 
 
 
@@ -1047,14 +1125,15 @@ for index, element in enumerate(liste_terminus):
 
 
 #Materialisation des EGUILLAGES
-refresh_eguillages()
-refresh_eguillages_depot()
-# Ajouter des trains avec un léger décalage vertical entre les lignes
-
+for element in liste_eguillages:
+    eguillage = Eguillage(canvas, canvas_metro, "Normal",element[0],element[1],element[2],element[3],element[4],element[5],element[6])
+    metro_control.add_eguillage(eguillage)
+    eguillage.refresh()
 
 
 for element in liste_metro:
-    train = Train(canvas, canvas_metro, element[0], element[1], element[2], element[3], element[4], element[5], liste_metro.index(element))
+    spawn = random.randint(-150, 150)  # Entre 1 et 10 inclus
+    train = Train(canvas, canvas_metro, element[0], element[1] + spawn, element[2], element[3], element[4], element[5], liste_metro.index(element))
     metro_control.add_train(train)
 
 global photo_fq_on
@@ -1074,7 +1153,7 @@ photo_fq_off = ImageTk.PhotoImage(image)
 
 
 for  index, element in enumerate(liste_stations):
-    station = Station(canvas, element[0], element[1], element[2], element[3], 1)
+    station = Station(canvas, element[0], element[1], element[2], element[3], element[4], 1, index)
     metro_control.add_station(station)
     # Créer un bouton avec la couleur rouge par défaut
 
@@ -1091,7 +1170,7 @@ for  index, element in enumerate(liste_stations):
 # Mettre à jour les trains à intervalle régulier
 def update_trains():
     metro_control.update_trains()
-    root.after(50, update_trains)
+    root.after(1, update_trains)
 
 #bouton paramétre station ligne 14
 
@@ -1197,7 +1276,7 @@ photo_feu_rouge = ImageTk.PhotoImage(image)
 
 
 for element in liste_feu_traffic:
-    feu = Feu(canvas, element[0], element[1], element[2], element[3])
+    feu = Feu(canvas, element[0], element[1], element[2], element[3], element[4])
     metro_control.add_feu(feu)
 
 
