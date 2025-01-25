@@ -1,5 +1,5 @@
 class ClasseLigne14():
-    #Position Station(x, nom, ligne de haut en base)
+    #Position Station(x, nom, ligne de haut en bas,Haut/Bas,Temps)
     liste_stations = []
     liste_stations.append((350, "SAINT DENIS PLEYEL Q1", 1, "H", 350))
     liste_stations.append((350, "SAINT DENIS PLEYEL Q2", 2, "B", 410))
@@ -86,10 +86,12 @@ class ClasseLigne14():
     liste_terminus.append((2290, 2, "MADELEINE2", 0))
     liste_terminus.append((4035, 2, "CHATELET", 0))
     liste_terminus.append((4660, 2, "GARE DE LYON", 0))
+    liste_terminus.append((4545, 1, "GARE DE LYON I", 0))
     liste_terminus.append((6290, 2, "BIBLIOTHEQUE FRANCOIS MITTERRAND1", 0))
     liste_terminus.append((6710, 1, "OLYMPIADES1", 0))
     liste_terminus.append((6710, 2, "OLYMPIADES2", 0))
-    liste_terminus.append((7089, 1, "MAISON BLANCHE1", 0))
+    liste_terminus.append((7069, 2, "MAISON BLANCHE1", 0))
+    liste_terminus.append((6939, 1, "MAISON BLANCHE I", 0))
     liste_terminus.append((7949, 2, "VILLEJUIF GUSTAVE ROUSSY1", 0))
     liste_terminus.append((9100, 2, "THAIS ORLY1", 0))
     liste_terminus.append((9530, 1, "AEROPORT D'ORLY1", 1))
