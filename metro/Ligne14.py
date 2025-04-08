@@ -40,8 +40,8 @@ class ClasseLigne14():
     liste_stations.append((8319, "CHEVILLY LARUE Q2", 2, "B", 280))
     liste_stations.append((8939, "THIAIS ORLY Q1", 1, "H", 280))
     liste_stations.append((8939, "THIAIS ORLY Q2", 2, "B", 280))
-    liste_stations.append((9339, "AEROPORT D'ORLY Q1", 1, "H", 350))
-    liste_stations.append((9339, "AEROPORT D'ORLY Q2", 2, "B", 350))
+    liste_stations.append((9339, "AÉROPORT D'ORLY Q1", 1, "H", 350))
+    liste_stations.append((9339, "AÉROPORT D'ORLY Q2", 2, "B", 350))
 
     liste_eguillages = []
     liste_eguillages.append((110, 2, 140, 1, 0, "Eg SAINT DENIS PLEYEL1","#EBEBEB"))
@@ -100,7 +100,7 @@ class ClasseLigne14():
     liste_metro = []
     #train direction chateau de vincennes
     liste_metro.append(("1", 8800, 0.30, 2, 1, "#EB0004"))
-    liste_metro.append(("2",200, 0.30, 2, 1, "#EB0004"))
+    liste_metro.append(("2",200, 0.30, 2, 0, "#EB0004"))
     liste_metro.append(("3",700,  0.30, 2, 1, "#EB0004"))
     liste_metro.append(("4",1000, 0.30, 2, 1, "#EB0004"))
     liste_metro.append(("5",1300,  0.30, 2, 1, "#EB0004"))
@@ -160,7 +160,7 @@ class ClasseLigne14():
     liste_metro.append(("59",8800,  -0.30, 1, 1,"#EB0004" ))
     liste_metro.append(("61", 9100, 0.30, 2, 1,"#EB0004" ))
     liste_metro.append(("62",9100, -0.30, 1, 1,"#EB0004" ))
-    liste_metro.append(("63",9400,  0.30, 2, 1,"#EB0004" ))
+    liste_metro.append(("63",9400,  0.30, 2, 0,"#EB0004" ))
     liste_metro.append(("64",9400,  -0.30, 1, 1,"#EB0004" ))
     liste_metro.append(("65",9700,  0.30, 2, 0,"#EB0004" ))
     liste_metro.append(("66",9700,  -0.30, 1, 0,"#EB0004" ))

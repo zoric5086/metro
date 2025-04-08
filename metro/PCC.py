@@ -45,7 +45,7 @@ def Offset_To_Y(offset, type="", position=""):
     else:
         return premiere_ligne + (ecart * offset)
 
-def Raise_Text(text):
+def Raise_Text(text, self):
     # test bulle
 
     global shape_ids
@@ -69,41 +69,45 @@ def Raise_Text(text):
     #move_rounded_rectangle_left(canvas, shape_ids + (text_id,), dx, dy, stop_x)
 
 
+
 def open_modal(station):
-    # Créer une nouvelle fenêtre (modale)
     modal_window = Toplevel(root)
     modal_window.title(station.name)
-    modal_window.geometry("300x200")
-
-    # Désactiver l'interaction avec la fenêtre principale
+    modal_window.geometry("350x200")
     modal_window.transient(root)
     modal_window.grab_set()
 
-    # Ajouter un canvas dans la fenêtre modale
-    canvas_modal = tk.Canvas(modal_window, width=280, height=150, bg="#E0E0E0")
+    canvas_modal = tk.Canvas(modal_window, width=350, height=150, bg="#E0E0E0")
     canvas_modal.pack(pady=10)
 
-    # Variable partagée pour les radio buttons
-    if station.isreturn == 1:
-        radio_var = tk.IntVar(value=1)
-    elif station.isarret == 1:
-        radio_var = tk.IntVar(value=2)
+    button = tk.Button(modal_window, text="Ouvert", bg="green", fg="white", command=lambda: toggle(button, station))
+    canvas_modal.create_window(175, 20, window=button)
+
+    radio_var = tk.IntVar(value=1 if station.isreturn else 2 if station.isarret else 3)
+
+    radio1 = tk.Radiobutton(canvas_modal, text="Retournement", variable=radio_var, value=1,
+                            command=lambda: show_selected(radio_var, station))
+    radio2 = tk.Radiobutton(canvas_modal, text="Arrêt", variable=radio_var, value=2,
+                            command=lambda: show_selected(radio_var, station))
+    radio3 = tk.Radiobutton(canvas_modal, text="Terminus", variable=radio_var, value=3,
+                            command=lambda: show_selected(radio_var, station))
+
+    canvas_modal.create_window(100, 70, window=radio1)
+    canvas_modal.create_window(200, 70, window=radio2)
+    canvas_modal.create_window(300, 70, window=radio3)
+
+    dso_button = tk.Button(canvas_modal, font=("Arial", 7), text="DSO", bg="#12F04F", fg="#000000", wraplength=100,
+                           width=20, height=3)
+    canvas_modal.create_window(175, 130, window=dso_button)
+
+
+def toggle(button, station):
+    if station.open == 1:
+        station.Stop()
+        button.config(text="Fermé", bg="red")
     else:
-        radio_var = tk.IntVar(value=3)
-
-    # Création des radio buttons
-    radio1 = tk.Radiobutton(canvas_modal, text="Retournement", variable=radio_var, value=1, command=lambda: show_selected(radio_var,station))
-    radio2 = tk.Radiobutton(canvas_modal, text="Arrêt", variable=radio_var, value=2, command=lambda: show_selected(radio_var, station))
-    radio3 = tk.Radiobutton(canvas_modal, text="Terminus", variable=radio_var, value=3, command=lambda: show_selected(radio_var, station))
-
-
-    # Ajout des radio buttons dans le canvas
-    canvas_modal.create_window(100, 70, window=radio1)  # Position du premier bouton
-    canvas_modal.create_window(200, 70, window=radio2)  # Position du deuxième bouton
-    canvas_modal.create_window(300, 70, window=radio3)  # Position du deuxième bouton
-
-
-
+        station.Start()
+        button.config(text="Ouvert", bg="green")
 
 def show_selected(radio_var,station):
     selected = radio_var.get()
@@ -122,6 +126,7 @@ def show_selected(radio_var,station):
         station.isarret= 0
         station.isreturn = 0
         print("Option 2 sélectionnée")
+
 
 
 def create_rounded_rectangle(canvas, x1, y1, x2, y2, radius):
@@ -151,14 +156,17 @@ def move_rounded_rectangle_left(canvas, shape, dx, dy, stop_x):
 
     canvas.after(100, move_rounded_rectangle_left, canvas, shape, dx, dy, stop_x)
 
-def get_destination(train, list_station):
-    filtered_station = [station for station in list_station if station.Offset == train.offset]
-    if train.orig_speed >0:
-        #identifier le dernier arrêt le plus à droite
-        return max(filtered_station, key=lambda station: station.x1)
-    if train.orig_speed  < 0:
-        #identifier le dernier arrêt le plus à droite
-        return min(filtered_station, key=lambda station: station.x1)
+def get_destination(train):
+    filtered_station = [station for station in metro_control.stations if station.Offset == train.offset]
+    if train.on_off == 0 and train.descelere == 0:
+        return None
+    else:
+        if train.orig_speed > 0:
+            #identifier le dernier arrêt le plus à droite
+            return max(filtered_station, key=lambda station: station.x1)
+        if train.orig_speed  < 0:
+            #identifier le dernier arrêt le plus à droite
+            return min(filtered_station, key=lambda station: station.x1)
 
 def on_horizontal_scroll(*args):
     canvas.xview(*args)
@@ -281,13 +289,13 @@ def clic_sur_canevas(event):
             #station.rec_id = canvas.create_rectangle(station.x1, station.y1, station.x2, station.y2, fill=station.color, outline="")
 
 
+
+
     #controle des trains : arret et direction de demarrage
     for train in metro_control.trains:
         #== "#EB0004":
         if train.x1 <= x <= train.x2 and train.y1 - 2 <= y <= train.y1 + 2 and train.color != "#000000":
-            train.color = "#000000"
-            train.speed = 0
-            train.on_off = 0
+            train.stop()
         #si fleche gauche
         if train.button_dir_droit != None and train.x1 - 5  <= x <= train.x1 and train.y1 - 2.5 <= y <= train.y1 + 2.5 and (train.color == "#000000" or train.arret_collision == 1):
             train.color = "#EB0004"
@@ -448,11 +456,78 @@ class Train:
         self.sound=0
         self.button = None
         self.eguillage = None
+        self.descelere = 0
+
+    def stop(self):
+        if self.speed > 0:
+            self.freinage(self.x1, self.x1 + 50)
+        else:
+            self.freinage(self.x1, self.x1 - 50)
+        #if self.on_off == 1:
+        #    self.color = "#000000"
+        #    self.on_off = 0
+        #    self.orig_speed = self.speed
+
+
+
+
+    def demarrage_station(self, duree, station):
+        self.arret = self.arret + 1
+        if self.arret > duree and self.color != "#000000":
+            if self.orig_speed > 0:
+                if self.speed < self.orig_speed:
+                    self.speed = self.speed + 0.05
+                if self.speed == self.orig_speed:
+                    self.arret_station = 0
+                    self.arret = 0
+                    station.FQ_OFF()
+            if self.orig_speed < 0:
+                if self.speed > self.orig_speed:
+                    self.speed = self.speed - 0.05
+                if self.speed == self.orig_speed:
+                    self.arret_station = 0
+                    self.arret = 0
+                    station.FQ_OFF()
+        else:
+            self.speed = 0
+
+    def freinage(self, debut_zone, fin_zone):
+        # calcul distance avant freinage
+        if self.descelere == 0:
+            self.orig_speed = self.speed
+            self.descelere = abs(abs(debut_zone + fin_zone) / 2 - abs(self.x1 + self.x2) / 2)
+        distance = abs(abs(debut_zone + fin_zone) / 2 - abs(self.x1 + self.x2) / 2)
+        descelere = (distance / self.descelere)
+        self.speed = self.orig_speed * descelere
+
+
+    def arrivee_station(self, station):
+        self.freinage(station.x1, station.x2)
+        if ((station.x1 + station.x2)/2) - abs(self.orig_speed) <= (self.x1 + self.x2)/2 <= ((station.x1 + station.x2)/2) +  abs(self.orig_speed):
+            self.last_station = station.name + str(station.lineUp)
+            print(self.name + " " + station.name)
+            self.canvas_metro.delete(self.text_metro)
+            self.text_metro = self.canvas_metro.create_text(520, (self.order + 1) * 20 + 50, text=station.name,
+                                                            anchor="w", fill="#000000", font=("Arial", 8))
+            self.arret_station = 1
+            self.descelere = 0
+            station.FQ_ON()
+
+
+
     def move(self):
-        self.station_destination = get_destination(self,metro_control.stations)
+
+
+        #Affichage Destination (Indisponible si inconnue)
+        self.station_destination =  get_destination(self)
         if self.text_destination:
             self.canvas_metro.delete(self.text_destination)
-        self.text_destination = self.canvas_metro.create_text(680, (self.order + 1) * 20 + 50, text=self.station_destination.name, anchor="w",fill="#000000", font=("Arial", 8))
+        if self.station_destination:
+            self.text_destination = self.canvas_metro.create_text(680, (self.order + 1) * 20 + 50, text=self.station_destination.name, anchor="w",fill="#000000", font=("Arial", 8))
+        else:
+            self.text_destination = self.canvas_metro.create_text(680, (self.order + 1) * 20 + 50,text="INDISPONIBLE...", anchor="w",fill="#FF0000", font=("Arial", 8))
+
+        #Deplacement dans un aiguillage
         if self.eguillage:
             #gauche droite, bas haut
             if self.eguillage.x_entree < self.eguillage.x_sortie and self.eguillage.offset_entree > self.eguillage.offset_sortie:
@@ -516,7 +591,6 @@ class Train:
                     self.x1 = self.x2 - 50
                     self.eguillage = None
 
-
             #droite gauche haut bas
             elif self.eguillage.x_entree > self.eguillage.x_sortie and self.eguillage.offset_entree < self.eguillage.offset_sortie:
                 if self.x2 > self.eguillage.x_entree:
@@ -538,11 +612,12 @@ class Train:
                     self.x1 = self.x2 - 50
                     self.eguillage = None
 
-
+        #Déplacement tout droit
         else:
             self.x1 += self.speed
             self.x2 += self.speed
 
+        #Compteur Arrêt
         if self.on_off == 0:
             self.color = "#000000"
             self.speed = 0
@@ -552,85 +627,28 @@ class Train:
         for station in metro_control.stations:
             if station.isarret == 1:
                 #Arrivée en station d'un train circulant de la gauche vers la droite
-                if station.Offset == self.offset and self.arret_station == 0 and self.speed > 0 and (station.x1 + station.x2)/2 - self.speed/2 <= (self.x1 + self.x2)/2 <= (station.x1 + station.x2)/2 + self.speed/2  and station.open == 1:
-                    self.last_station = station.name+str(station.lineUp)
-                    print(self.name + " " + station.name)
-                    self.canvas_metro.delete(self.text_metro)
-                    self.text_metro = self.canvas_metro.create_text(560, (self.order +1) * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
-
-                    self.speed = 0
-                    self.arret_station = 1
-                    station.FQ_ON()
+                if station.Offset == self.offset and self.arret_station == 0 and self.speed > 0 and self.x2 >= station.x1 and  self.x2 <= station.x2 + abs(self.orig_speed) and station.open == 1 and self.last_station != station.name+str(station.lineUp):
+                    self.arrivee_station(station)
                 # Arrivée en station d'un train circulant de la droite vers la gauche
-                elif station.Offset == self.offset and self.arret_station == 0 and self.speed < 0 and (station.x1 + station.x2)/2 - self.speed/2 >= (self.x1 + self.x2)/2 >= (station.x1 + station.x2)/2 + self.speed/2 and station.open == 1:
-                    self.last_station = station.name+str(station.lineUp)
-                    print(self.name + " " + station.name)
-                    self.canvas_metro.delete(self.text_metro)
-                    self.text_metro = self.canvas_metro.create_text(560,  (self.order +1) * 20 + 50, text=station.name, anchor="w", fill="#000000", font=("Arial", 8))
-                    station.FQ_ON()
-                    self.speed = 0
-                    self.arret_station = 1
+                elif station.Offset == self.offset and self.arret_station == 0 and self.speed < 0 and self.x1 <= station.x2 and  self.x2 >= station.x1 and station.open == 1 and self.last_station != station.name+str(station.lineUp):
+                    self.arrivee_station(station)
                 #compteur de temps d'arrêt
-                elif  station.Offset == self.offset and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
-                    self.arret = self.arret + 1
-                    if self.arret > station.duree_stop and self.color != "#000000":
-                        if self.orig_speed > 0:
-                            if self.speed<= self.orig_speed:
-                                self.speed = self.speed+0.05
-                            if self.speed >= 0:
-                                station.FQ_OFF()
-                            if self.speed >= self.orig_speed:
-                                self.arret_station = 0
-                                self.arret = 0
-                        if self.orig_speed < 0:
-                            if self.speed>= self.orig_speed:
-                                self.speed = self.speed-0.05
-                            if self.speed <= 0:
-                                station.FQ_OFF()
-                            if self.speed <= self.orig_speed:
-                                self.arret_station = 0
-                                self.arret = 0
+                elif station.Offset == self.offset and self.arret_station == 1 and self.last_station == station.name+str(station.lineUp):
+                    self.demarrage_station(station.duree_stop, station)
+
             if station.isreturn == 1:
                 # Arrivée en station d'un train circulant de la gauche vers la droite
-                if station.Offset == self.offset and self.arret_station == 0 and self.speed > 0 and (station.x1 + station.x2) / 2 - self.speed / 2 <= (self.x1 + self.x2) / 2 <= (station.x1 + station.x2) / 2 + self.speed / 2 and station.open == 1:
-                    self.last_station = station.name + str(station.lineUp)
-                    print(self.name + " " + station.name)
-                    self.canvas_metro.delete(self.text_metro)
-                    self.text_metro = self.canvas_metro.create_text(560, (self.order + 1) * 20 + 50, text=station.name,anchor="w", fill="#000000", font=("Arial", 8))
-                    self.speed = 0
-                    self.arret_station = 1
-                    self.orig_speed = self.orig_speed * -1
-                    station.FQ_ON()
+                if station.Offset == self.offset and self.arret_station == 0 and self.speed > 0 and (station.x1 + station.x2) / 2 - self.orig_speed / 2 <= (self.x1 + self.x2) / 2 <= (station.x1 + station.x2) / 2 + self.orig_speed / 2 and station.open == 1:
+                    self.arrivee_station(station)
                 # Arrivée en station d'un train circulant de la droite vers la gauche
                 elif station.Offset == self.offset and self.arret_station == 0 and self.speed < 0 and (station.x1 + station.x2) / 2 - self.speed / 2 >= (self.x1 + self.x2) / 2 >= (station.x1 + station.x2) / 2 + self.speed / 2 and station.open == 1:
-                    self.last_station = station.name + str(station.lineUp)
-                    print(self.name + " " + station.name)
-                    self.canvas_metro.delete(self.text_metro)
-                    self.text_metro = self.canvas_metro.create_text(580, (self.order + 1) * 20 + 50, text=station.name,anchor="w", fill="#000000", font=("Arial", 8))
-                    station.FQ_ON()
-                    self.speed = 0
-                    self.arret_station = 1
-                    self.orig_speed = self.orig_speed * -1
+                    self.arrivee_station(station)
                 # compteur de temps d'arrêt
                 elif station.Offset == self.offset and self.arret_station == 1 and self.last_station == station.name + str(station.lineUp):
-                    self.arret = self.arret + 1
-                    if self.arret > station.duree_stop and self.color != "#000000":
-                        if self.orig_speed > 0:
-                            if self.speed <= self.orig_speed:
-                                self.speed = self.speed + 0.05
-                            if self.speed >= 0:
-                                station.FQ_OFF()
-                            if self.speed >= self.orig_speed:
-                                self.arret_station = 0
-                                self.arret = 0
-                        if self.orig_speed < 0:
-                            if self.speed >= self.orig_speed:
-                                self.speed = self.speed - 0.05
-                            if self.speed <= 0:
-                                station.FQ_OFF()
-                            if self.speed <= self.orig_speed:
-                                self.arret_station = 0
-                                self.arret = 0
+                    self.orig_speed = self.orig_speed * -1
+                    self.demarrage_station(station.duree_stop, station)
+
+    
 
         #gestion des feux
         for feu in metro_control.feux:
@@ -688,6 +706,7 @@ class Train:
                     #Raise_Text(self.name)
                     #self.color = "#985717"
                 break
+
             elif self.arret_collision == 1 and self.color != "#000000":
                 self.arret_collision = 0
                 self.speed = self.orig_speed
@@ -797,14 +816,14 @@ class Train:
             self.canvas.coords(self.line_id, self.x1, self.y1, self.x2, self.y2)
             self.canvas.itemconfig(self.line_id, fill=self.color)
             self.canvas_metro.delete(self.draw_metro)
-            self.draw_metro = self.canvas_metro.create_line(500, (self.order +1) * 20 + 50, 550, (self.order +1) * 20 + 50, fill=self.color, width=5)
+            self.draw_metro = self.canvas_metro.create_line(460, (self.order +1) * 20 + 50, 510, (self.order +1) * 20 + 50, fill=self.color, width=5)
 
             if self.speed > 0:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
                 self.dir_metro = self.canvas_metro.create_polygon(
-                    [550, (self.order +1) * 20 + 50 + 5, 550,
-                     (self.order +1) * 20 + 50 - 5, 550 + 5,
+                    [510, (self.order +1) * 20 + 50 + 5, 510,
+                     (self.order +1) * 20 + 50 - 5, 510 + 5,
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
                 self.canvas.delete(self.draw_metro_name)
                 self.canvas.delete(self.train_rectangle)
@@ -824,8 +843,8 @@ class Train:
                 self.canvas_metro.delete(self.text_metro)
                 self.canvas_metro.delete(self.dir_metro)
                 self.dir_metro = self.canvas_metro.create_polygon(
-                    [500, (self.order +1) * 20 + 50 + 5, 500,
-                     (self.order +1) * 20 + 50 - 5, 500 - 5,
+                    [460, (self.order +1) * 20 + 50 + 5, 460,
+                     (self.order +1) * 20 + 50 - 5, 460 - 5,
                      (self.order +1) * 20 + 50], outline="", fill="#000000", width=0)
 
                 self.canvas.delete(self.draw_metro_name)
@@ -855,7 +874,7 @@ class Train:
             self.canvas.delete(self.draw_metro_name)
             self.draw_metro_name = self.canvas.create_text(self.x1, self.y1, text=self.name,fill="#000000",font=("Arial", 8))
             self.canvas_metro.delete(self.nom_metro)
-            self.nom_metro = self.canvas_metro.create_text(450, (self.order + 1) * 20 + 50, text=self.name,
+            self.nom_metro = self.canvas_metro.create_text(430, (self.order + 1) * 20 + 50, text=self.name,
                                                            fill="#000000",
                                                            font=("Arial", 8))
 
@@ -876,6 +895,7 @@ class Station:
         self.isreturn = 0
         self.isarret = 1
         self.isterminus = 0
+        self.dso_off = 0
         self.duree_stop = DureeStop
         self.position = Position
         self.x2 = X + 50
@@ -1082,8 +1102,9 @@ class MetroControl:
 def action_bouton_stop():
     print("Bouton cliqué !")
     for train in metro_control.trains:
-            train.color = "#000000"
-            train.speed = 0
+        train.stop()
+
+
 
 
 def action_bouton_reprise():
@@ -1105,11 +1126,7 @@ def action_bouton_reprise():
 def ouvrir_fenetre():
     root_metro.deiconify()
 
-def toggle_station_button(station):
-    if station.open == 1:
-        station.Stop()
-    else:
-        station.Start()
+
 
 def toggle_terminus_button(terminus):
     if terminus.Etat == 1:
@@ -1152,7 +1169,7 @@ vertical_scrollbar.pack(side="left", fill="x")
 #bouton_reprise.pack()
 
 #Ligne = sys.argv[1]
-Ligne = "14"
+Ligne = "0"
 
 if Ligne == "1":
     #Ligne 1
@@ -1166,7 +1183,7 @@ if Ligne == "1":
     liste_feu_traffic = ClasseLigne1.liste_feu_traffic
 
 
-if Ligne == "2":
+if Ligne == "0":
     #Ligne 1
     liste_stations = ClasseLigne2.liste_stations
     liste_eguillages = ClasseLigne2.liste_eguillages
