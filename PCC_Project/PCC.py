@@ -754,8 +754,8 @@ vertical_scrollbar.pack(side="left", fill="x")
 #bouton_reprise = tk.Button(canevas, command=action_bouton)
 #bouton_reprise.pack()
 
-Ligne = sys.argv[1]
-#Ligne = "14"
+#Ligne = sys.argv[1]
+Ligne = "14"
 
 if Ligne == "1":
     #Ligne 1

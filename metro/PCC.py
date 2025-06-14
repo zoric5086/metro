@@ -277,12 +277,12 @@ def clic_sur_canevas(event):
     y = canvas.canvasy(event.y)
 
     #controle des stations : fermeture de station
-    for station in metro_control.stations:
+    '''for station in metro_control.stations:
         if station.x1 <= x <= station.x2:
             if station.open == 0:
                 station.Start()
             else:
-                station.Stop()
+                station.Stop()'''
             #station.canvas.delete(station.rec_id)
             #station.canvas.delete(station.text_id)
             #station.text_id = canvas.create_text(station.x1 + 32, 20, text=station.name, fill=station.color, font=("Arial", 8), anchor="center")
@@ -497,7 +497,7 @@ class Train:
             self.orig_speed = self.speed
             self.descelere = abs(abs(debut_zone + fin_zone) / 2 - abs(self.x1 + self.x2) / 2)
         distance = abs(abs(debut_zone + fin_zone) / 2 - abs(self.x1 + self.x2) / 2)
-        descelere = (distance / self.descelere)
+        descelere = (distance / self.descelere) * 4
         self.speed = self.orig_speed * descelere
 
 
@@ -787,7 +787,7 @@ class Train:
                     print(self.name + " arrive a " + eguillage.name)
                     self.eguillage=eguillage
 
-                # si le train va de  droite a gauche, que l'eguillage va de droite a gauche et le train atteint l'équillage
+                # si le train va de droite a gauche, que l'eguillage va de droite a gauche et le train atteint l'équillage
                 if eguillage.x_entree > eguillage.x_sortie and self.speed < 0 and (eguillage.x_entree - abs(self.orig_speed / 2) <= self.x1 < eguillage.x_entree + abs(self.orig_speed / 2)):
                     print(self.name + " arrive a " + eguillage.name)
                     self.eguillage = eguillage
@@ -802,7 +802,7 @@ class Train:
                         self.speed = 0
                         self.arret = self.arret + 1
                             # print(self.arret)
-                        if self.arret > 60 and self.color != "#000000":
+                        if self.arret > 600 and self.color != "#000000":
                             self.arret = 0
                             self.speed = self.orig_speed * (-1)
                             self.orig_speed = self.speed
@@ -898,6 +898,7 @@ class Station:
         self.dso_off = 0
         self.duree_stop = DureeStop
         self.position = Position
+        self.image_ouvert = None
         self.x2 = X + 50
         self.index = index
         if Position== "H":
@@ -923,21 +924,24 @@ class Station:
         self.bouton = tk.Button(canvas_metro, command=lambda: open_modal(self), font=("Arial", 7), text=self.name,bg="#12F04F", fg="#000000", wraplength=100, width=20, height=3)
         self.bouton.pack()
         if Position == "H":
-            self.bouton_window = canvas_metro.create_window(20,
-                                                            50 * (self.index//2) + 100, anchor=tk.W,
-                                                            window=self.bouton)
+            self.bouton_window = canvas_metro.create_window(20,50 * (self.index//2) + 100, anchor=tk.W,window=self.bouton)
         elif Position == "B":
-            self.bouton_window = canvas_metro.create_window(260,
-                                                            50 * (self.index//2) + 100, anchor=tk.W,
-                                                            window=self.bouton)
+            self.bouton_window = canvas_metro.create_window(260,50 * (self.index//2) + 100, anchor=tk.W,window=self.bouton)
         else:
-            self.bouton_window = canvas_metro.create_window(140,
-                                                            50 * (self.index//2) + 100, anchor=tk.W,
-                                                            window=self.bouton)
+            self.bouton_window = canvas_metro.create_window(140,50 * (self.index//2) + 100, anchor=tk.W,window=self.bouton)
 
+        self.Start()
+    #def action station fermé
     def Start(self):
         self.open = 1
-        self.color = "#8BB1D5"
+        canvas.delete(self.image_ouvert)
+        if self.position == "H":
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 + 35,Offset_To_Y(self.Offset, "Station", self.position) - 15, anchor=tk.CENTER,image=photo_station_ouvert)
+        elif self.position == "B":
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 - 35,Offset_To_Y(self.Offset, "Station", self.position) + 15, anchor=tk.CENTER,image=photo_station_ouvert)
+        else:
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 - 35,Offset_To_Y(self.Offset, "Station", self.position) + 15, anchor=tk.CENTER,image=photo_station_ouvert)
+        '''self.color = "#8BB1D5"
         canvas.delete(self.text_id)
         self.text_id = canvas.create_text(self.x1 + 32, 20, text=self.name, fill="#000000", font=("Arial", 8), anchor="center")
         canvas.delete(self.rec_id)
@@ -947,12 +951,18 @@ class Station:
         if self.quai_on == 0:
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2)/2 , anchor=tk.CENTER, image=photo_fq_off)
         else:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,image=photo_fq_on)
-
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER,image=photo_fq_on)'''
+    #def action station ouvert
     def Stop(self):
         self.open = 0
-        self.color = "#FF0000"
-        self.bouton["bg"] = "#FF0000"
+        canvas.delete(self.image_ouvert)
+        if self.position == "H":
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 + 35,Offset_To_Y(self.Offset, "Station", self.position) - 15, anchor=tk.CENTER,image=photo_station_ferme)
+        elif self.position == "B":
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 - 35,Offset_To_Y(self.Offset, "Station", self.position) + 15, anchor=tk.CENTER,image=photo_station_ferme)
+        else:
+            self.image_ouvert = canvas.create_image((self.x1 + self.x2) / 2 - 35,Offset_To_Y(self.Offset, "Station", self.position) + 15, anchor=tk.CENTER,image=photo_station_ferme)
+        '''self.bouton["bg"] = "#FF0000"
         canvas.delete(self.text_id)
         self.text_id = canvas.create_text(self.x1 + 32, 20, text=self.name, fill=self.color, font=("Arial", 8), anchor="center")
         canvas.delete(self.rec_id)
@@ -961,7 +971,7 @@ class Station:
         if self.quai_on == 0:
             self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_off)
         else:
-            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_on)
+            self.image = canvas.create_image((self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2, anchor=tk.CENTER, image=photo_fq_on)'''
     def FQ_ON(self):
         self.quai_on = 1
         canvas.delete(self.image)
@@ -1042,7 +1052,7 @@ class Terminus:
             self.bouton = tk.Button(canvas_metro, command=lambda: toggle_terminus_button(self), font=("Arial", 7), text=self.Name, bg="#12F04F", fg="#000000", wraplength=100, width=20, height=2)
             self.bouton.pack()
             self.bouton_window = canvas_metro.create_window(820, 33 * self.index + 160, anchor=tk.W, window=self.bouton)
-
+    #bouton terminus dans parametre
     def Start(self):
         self.Etat = 1
         canvas_metro.delete(self.bouton_window)
@@ -1169,7 +1179,7 @@ vertical_scrollbar.pack(side="left", fill="x")
 #bouton_reprise.pack()
 
 #Ligne = sys.argv[1]
-Ligne = "0"
+Ligne = "14"
 
 if Ligne == "1":
     #Ligne 1
@@ -1279,7 +1289,7 @@ for element in liste_eguillages:
 
 
 for element in liste_metro:
-    spawn = random.randint(-150, 150)  # Entre 1 et 10 inclus
+    spawn = random.randint(-50, 50)  # Entre 1 et 10 inclus
     train = Train(canvas, canvas_metro, element[0], element[1] + spawn, element[2], element[3], element[4], element[5], liste_metro.index(element))
     metro_control.add_train(train)
 
@@ -1296,6 +1306,20 @@ image = Image.open("fq_off.PNG")
 image = image.resize((16, 10))
 # Convertir l'image en format compatible avec Tkinter
 photo_fq_off = ImageTk.PhotoImage(image)
+
+global photo_station_ouvert
+global photo_station_ferme
+image = Image.open("station_ouvert.png")
+# Redimensionner l'image à une taille de 50x50 pixels
+image = image.resize((15, 28))
+# Convertir l'image en format compatible avec Tkinter
+photo_station_ouvert = ImageTk.PhotoImage(image)
+
+image = Image.open("station_ferme.png")
+# Redimensionner l'image à une taille de 50x50 pixels
+image = image.resize((15, 28))
+# Convertir l'image en format compatible avec Tkinter
+photo_station_ferme = ImageTk.PhotoImage(image)
 
 
 
@@ -1317,7 +1341,7 @@ for  index, element in enumerate(liste_stations):
 # Mettre à jour les trains à intervalle régulier
 def update_trains():
     metro_control.update_trains()
-    root.after(1, update_trains)
+    root.after(10, update_trains)
 
 #bouton paramétre station ligne 14
 
